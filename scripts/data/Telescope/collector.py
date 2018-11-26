@@ -24,7 +24,7 @@ class Collector:
             github_url = 'https://api.github.com/' + path + '?client_id=' + self.client_id + '&client_secret=' + self.client_secret
             print('Creating a requisition: ' + path)
         else:
-            github_url = 'https://api.github.com/' + path + '?client_id=' + self.client_id + '&client_secret=' + self.clieint_secret + '&' + '&'.join(parameters)
+            github_url = 'https://api.github.com/' + path + '?client_id=' + self.client_id + '&client_secret=' + self.client_secret + '&' + '&'.join(parameters)
             print('Creating a composed requisition: ' + path + '?' + '&'.join(parameters))
 
         try:
