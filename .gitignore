@@ -1,3 +1,5 @@
 venv/
 dataset/
+.vscode/
 *.pyc
+error.log

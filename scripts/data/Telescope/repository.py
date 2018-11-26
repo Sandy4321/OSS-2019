@@ -121,7 +121,6 @@ class Repository:
     
     def pull_requests(self, state=None, direction=None, sort=None, base=None, head=None, page_range={}):
         print('[Repository] Returning pull-requests available in ' + self.name)
-
         pull_requests = []
         parameters = []
 
@@ -174,7 +173,7 @@ class Repository:
             last_page = page_range['last_page']
 
             for page_number in range(first_page, last_page):
-                request = self.github.request('repos/' + self.organization + '/' + self.name + '/pulls' + '/' + str(number) + '/comments', parameters + ['page=' + str(page_number)])
+                request = self.github.request('repos/' + self.organization + '/' + self.name + '/pulls' + '/' + str(number) + '/comments', ['page=' + str(page_number)])
 
                 if request:
                     for review in request:
@@ -184,7 +183,7 @@ class Repository:
             page_number = 1
 
             while(pages_exist):
-                request = self.github.request('repos/' + self.organization + '/' + self.name + '/pulls' + '/' + str(number) + '/comments', parameters + ['page=' + str(page_number)])
+                request = self.github.request('repos/' + self.organization + '/' + self.name + '/pulls' + '/' + str(number) + '/comments', ['page=' + str(page_number)])
 
                 if request:
                     for review in request:
@@ -204,7 +203,7 @@ class Repository:
             last_page = page_range['last_page']
 
             for page_number in range(first_page, last_page):
-                request = self.github.request('repos/' + self.organization + '/' + self.name + '/issues' + '/' + str(number) + '/comments', parameters + ['page=' + str(page_number)])
+                request = self.github.request('repos/' + self.organization + '/' + self.name + '/issues' + '/' + str(number) + '/comments', ['page=' + str(page_number)])
 
                 if request:
                     for comment in request:
@@ -214,7 +213,7 @@ class Repository:
             page_number = 1
 
             while(pages_exist):
-                request = self.github.request('repos/' + self.organization + '/' + self.name + '/issues' + '/' + str(number) + '/comments', parameters + ['page=' + str(page_number)])
+                request = self.github.request('repos/' + self.organization + '/' + self.name + '/issues' + '/' + str(number) + '/comments', ['page=' + str(page_number)])
 
                 if request:
                     for comment in request:
