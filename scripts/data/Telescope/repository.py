@@ -154,10 +154,12 @@ class Repository:
 
                 if request:
                     for pull_request in request:
-                        pull_request = self.pull_request(pull_request['number'])
-                        pull_request['reviews'] = self.pull_request_reviews(pull_request['number'])
-                        pull_request['comments'] = self.pull_request_comments(pull_request['number'])
-                        pull_requests.append(pull_request)
+                        if pull_request:
+                            if 'number' in pull_request:
+                            pull_request = self.pull_request(pull_request['number'])
+                            pull_request['reviews'] = self.pull_request_reviews(pull_request['number'])
+                            pull_request['comments'] = self.pull_request_comments(pull_request['number'])
+                            pull_requests.append(pull_request)
                 else:
                     pages_exist = False
 
