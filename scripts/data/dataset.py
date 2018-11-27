@@ -74,14 +74,17 @@ class Parser():
             print(self.repository['name'] + ' already contains a commits file. Skipping.')
 
     def get_pull_requests(self):
-        if not os.path.isfile(self.folder + '/pull_requests.json'):
-            pull_requests = self.collector.pull_requests(state='all')
+        try:
+            if not os.path.isfile(self.folder + '/pull_requests.json'):
+                pull_requests = self.collector.pull_requests(state='all')
 
-            with open(self.folder + '/pull_requests.json', 'w') as pull_requests_file:
-                json.dump(pull_requests, pull_requests_file)
-        else:
-            print(self.repository['name'] + ' already contains a pull-requests file. Skipping.')
-    
+                with open(self.folder + '/pull_requests.json', 'w') as pull_requests_file:
+                    json.dump(pull_requests, pull_requests_file)
+            else:
+                print(self.repository['name'] + ' already contains a pull-requests file. Skipping.')
+        except:
+            print("Problema nos pull_requests!")
+                
     def get_readme(self):
         if not os.path.isfile(self.folder + '/readme.json'):
             readme = self.collector.readme()
@@ -101,13 +104,16 @@ class Parser():
             print(self.repository['name'] + ' already contains a contributing file. Skipping.')
 
     def get_code_of_conduct(self):
-        if not os.path.isfile(self.folder + '/code_of_conduct.json'):
-            code_of_conduct = self.collector.code_of_conduct()
+        try:
+            if not os.path.isfile(self.folder + '/code_of_conduct.json'):
+                code_of_conduct = self.collector.code_of_conduct()
 
-            with open(self.folder + '/code_of_conduct.json', 'w') as code_of_conduct_file:
-                json.dump(code_of_conduct, code_of_conduct_file)
-        else:
-            print(self.repository['name'] + ' already contains a code of conduct file. Skipping.')
+                with open(self.folder + '/code_of_conduct.json', 'w') as code_of_conduct_file:
+                    json.dump(code_of_conduct, code_of_conduct_file)
+            else:
+                print(self.repository['name'] + ' already contains a code of conduct file. Skipping.')
+        except:
+            print("Problema no code of conduct!")
 
 def popular_projects_per_language(languages, dataset_folder, collector):
     search = GitHubSearch.Search(collector)
