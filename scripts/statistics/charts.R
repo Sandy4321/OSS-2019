@@ -1,6 +1,7 @@
 #########################################################
-#     Installing and loading required packages          #
+#             Installing/Loading Packages               #
 #########################################################
+
 if (!require("gplots")) {
   install.packages("gplots", dependencies = TRUE)
   library(gplots)
@@ -46,13 +47,28 @@ projects <- read.csv("spreadsheets/summary.csv", header=TRUE,
                                   "time_for_merge_median" = "numeric"
                                   ))
 
-boxplot_distribution <- function(n_row, n_column, columns, labels) {
-    par(mfrow=c(n_row, n_column))
+DistributionBoxplot <- function(n.rows, n.columns, columns, labels) {
+    par(mfrow=c(n.rows, n.columns))
 
-    for (column in seq_len(ncol(columns))) {
+    for (index in seq_len(ncol(columns))) {
         par(mar=c(2, 5, 2, 1) + 0.1)
-        boxplot(columns[,column], ylab=labels[[column]], outline=FALSE, cex.lab = 1.6, cex.axis = 1.8)
+        boxplot(columns[[index]], ylab=labels[[index]], outline=FALSE, cex.lab = 1.6, cex.axis = 1.8)
     }
+}
+
+ProportionBarplot <- function(distribution) {
+  par(mar=c(2, 2, 2, 2) + 0.1, las=2)
+  table <- table(distribution)
+  barplot(sort(table))
+}
+
+CorrelationScatterplot <- function(column.x, column.y, label.x, label.y) {
+  column.x.log10 <- log10(column.x)
+  column.y.log10 <- log10(column.y)
+  
+  plot(column.x.log10, column.y.log10, xlab=label.x, ylab=label.y)
+  #regression = lm(log10_column_y ~ log10_column_x)
+  #abline(regression, untf=T, col="red")
 }
 
 ##############################################
@@ -60,35 +76,20 @@ boxplot_distribution <- function(n_row, n_column, columns, labels) {
 ##############################################
 distribution <- subset(projects, select=c("forks_total","stars_total","open_issues_total"))
 labels <- list("# Forks", "# Stars", "# Open Issues")
-boxplot_distribution(1, 3, distribution, labels)
+DistributionBoxplot(1, 3, distribution, labels)
 
 ##########################################################
 #    FIGURE: Summary (Merged pull-requests, Commits) #
 ##########################################################
 distribution <- subset(projects, select=c("pulls_merged_total","commits_total"))
 labels <- list("# Pull-requests", "# Commits")
-boxplot_distribution(1, 2, distribution, labels)
+DistributionBoxplot(1, 2, distribution, labels)
 
 ##############################################
 #    FIGURE: Proportion (Projects by domain) #
 ##############################################
 distribution <- subset(projects, select=c("application_domain"))
-barplot_distribution(distribution)
-
-scatterplot_correlation <- function(column_x, column_y, label_x, label_y) {
-  log10_column_x <- log10(column_x)
-  log10_column_y <- log10(column_y)
-  
-  plot(log10_column_x, log10_column_y, xlab=label_x, ylab=label_y)
-  #regression = lm(log10_column_y ~ log10_column_x)
-  #abline(regression, untf=T, col="red")
-}
-
-barplot_distribution <- function(distribution) {
-  par(mar=c(2, 2, 2, 2) + 0.1, las=2)
-  table <- table(distribution)
-  barplot(sort(table))
-}
+ProportionBarplot(distribution)
 
 ##################################
 #    FIGURE: Correlation         #
@@ -99,34 +100,34 @@ barplot_distribution <- function(distribution) {
 # we normalized the values using log10.
 
 # Correlation: Total of Newcomers x Stars
-column_x <- projects[["newcomers_total"]]
-column_y <- projects[["stars_total"]]
-scatterplot_correlation(column_x, column_y, "# Newcomers", "# Stars")
+column.x <- projects[["newcomers_total"]]
+column.y <- projects[["stars_total"]]
+CorrelationScatterplot(column.x, column.y, "# Newcomers", "# Stars")
 
 # Correlation: Total of Newcomers x Pull-requests
-column_x <- projects[["newcomers_total"]]
-column_y <- projects[["pulls_merged_total"]]
-scatterplot_correlation(column_x, column_y, "# Newcomers", "# Pull-requests (Merged)")
+column.x <- projects[["newcomers_total"]]
+column.y <- projects[["pulls_merged_total"]]
+CorrelationScatterplot(column.x, column.y, "# Newcomers", "# Pull-requests (Merged)")
 
 # Correlation: Total of Newcomers x Forks
-column_x <- projects[["newcomers_total"]]
-column_y <- projects[["forks_total"]]
-scatterplot_correlation(column_x, column_y, "# Newcomers", "# Forks")
+column.x <- projects[["newcomers_total"]]
+column.y <- projects[["forks_total"]]
+CorrelationScatterplot(column.x, column.y, "# Newcomers", "# Forks")
 
 # Correlation: Total of Newcomers x Commits
-column_x <- projects[["newcomers_total"]]
-column_y <- projects[["commits_total"]]
-scatterplot_correlation(column_x, column_y, "# Newcomers", "# Commits")
+column.x <- projects[["newcomers_total"]]
+column.y <- projects[["commits_total"]]
+CorrelationScatterplot(column.x, column.y, "# Newcomers", "# Commits")
 
 # Correlation: Total of Newcomers x Number of used languages
-column_x <- projects[["newcomers_total"]]
-column_y <- projects[["used_languages_total"]]
-scatterplot_correlation(column_x, column_y, "# Newcomers", "# Prog. Languages")
+column.x <- projects[["newcomers_total"]]
+column.y <- projects[["used_languages_total"]]
+CorrelationScatterplot(column.x, column.y, "# Newcomers", "# Prog. Languages")
 
 # Correlation: Total of Newcomers x Open issues
-column_x <- projects[["newcomers_total"]]
-column_y <- projects[["open_issues_total"]]
-scatterplot_correlation(column_x, column_y, "# Newcomers", "# Open issues")
+column.x <- projects[["newcomers_total"]]
+column.y <- projects[["open_issues_total"]]
+CorrelationScatterplot(column.x, column.y, "# Newcomers", "# Open issues")
 
 #########################################################
 #       CLUSTERS: DIVIDED BY STRATIFICATION FACTORS     #
