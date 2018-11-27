@@ -4,4 +4,6 @@ dataset/
 *.pyc
 error.log
 .Rproj.*
-.Rproj.user
+.Rhistory
+.RData
+
