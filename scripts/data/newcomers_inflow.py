@@ -37,14 +37,13 @@ class NewcomersInflow():
             repositories = projects[language]['items']
 
             for repository in repositories:
-                project = repository['name'] 
-                project_folder = self.dataset_folder + '/' + language + '/' + project
-                project_weekly_series = self.project_weekly_series(project_folder)
-                weekly_series[project] = project_weekly_series
+                project_folder = self.dataset_folder + '/' + language + '/' + repository['name']
+                project_weekly_series = self.get_project_weekly_series(project_folder)
+                weekly_series[repository['full_name']] = project_weekly_series
 
         return weekly_series
 
-    def project_weekly_series(self, folder):
+    def get_project_weekly_series(self, folder):
         commits_file = json.load(open(folder + '/commits.json', 'r'))
         newcomers_list = []
         entry_list = []
@@ -99,7 +98,7 @@ class NewcomersInflow():
         with open(self.csv_folder + '/newcomers_inflow.csv', 'w') as inflow_file:
             writer = csv.DictWriter(inflow_file, fieldnames=['project'] + fieldnames)
             writer.writeheader()
-
+        
         for project in weekly_series:
             inflow = {}
             inflow['project'] = project

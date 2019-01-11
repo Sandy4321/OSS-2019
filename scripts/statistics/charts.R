@@ -15,8 +15,11 @@ if (!require("dplyr")) {
   library("dplyr")
 }
 
-setwd("/mnt/SSD-DATA/FAPESP-2018")
+setwd("/mnt/SSD-DATA/oss-2019")
 
+#########################################################
+#                 Loading Dataset                       #
+#########################################################
 #########################################################
 #                 Loading Dataset                       #
 #########################################################
@@ -26,26 +29,29 @@ projects <- read.csv("spreadsheets/summary.csv", header=TRUE,
                                   "owner" = "character",
                                   "created_at" = "character",
                                   "github_url" = "character",
-                                  "pulls_merged_total" = "numeric",
-                                  "pulls_merged_code_churn" = "numeric",
-                                  "commits_total" = "numeric",
-                                  "stars_total" = "numeric",
-                                  "forks_total" = "numeric",
+                                  "pulls_merged" = "numeric",
+                                  "commits" = "numeric",
+                                  "stars" = "numeric",
+                                  "forks" = "numeric",
                                   "has_contributing" = "logical",
                                   "has_readme" = "logical",
-                                  "used_languages_total" = "numeric",
-                                  "open_issues_total" = "numeric",
+                                  "languages" = "numeric",
                                   "age" = "numeric",
-                                  "application_domain" = "character",
+                                  "domain" = "character",
                                   "main_language" = "character",
                                   "owner_type" = "character",
-                                  "software_license" = "character",
-                                  "newcomers_total" = "numeric",
-                                  "contributors_total" = "numeric",
-                                  "core_members_total" = "numeric",
-                                  "time_for_first_review_median" = "numeric",
-                                  "time_for_merge_median" = "numeric"
-                                  ))
+                                  "has_license" = "logical",
+                                  "newcomers" = "numeric",
+                                  "contributors" = "numeric",
+                                  "core_contributors" = "numeric"))
+
+
+no_readme <- projects[which(projects$has_readme == FALSE),]
+no_contributing <- projects[which(projects$has_contributing == FALSE),]
+no_license <- projects[which(projects$has_license == FALSE),]
+write.csv(no_readme$github_url, file="hasnt_readme.csv")
+write.csv(no_license$github_url, file="hasnt_license.csv")
+write.csv(no_contributing$github_url, file="hasnt_contributing")
 
 DistributionBoxplot <- function(n.rows, n.columns, columns, labels) {
     par(mfrow=c(n.rows, n.columns))
@@ -56,40 +62,48 @@ DistributionBoxplot <- function(n.rows, n.columns, columns, labels) {
     }
 }
 
-ProportionBarplot <- function(distribution) {
-  par(mar=c(2, 2, 2, 2) + 0.1, las=2)
-  table <- table(distribution)
-  barplot(sort(table))
-}
-
 CorrelationScatterplot <- function(column.x, column.y, label.x, label.y) {
   column.x.log10 <- log10(column.x)
   column.y.log10 <- log10(column.y)
   
   plot(column.x.log10, column.y.log10, xlab=label.x, ylab=label.y)
-  #regression = lm(log10_column_y ~ log10_column_x)
-  #abline(regression, untf=T, col="red")
+  abline(lm(column.x.log10 ~ column.y.log10), col="red")
 }
+
+3##############################################
+#    FIGURE: Proportion (Projects by domain) #
+##############################################
+# Figure Size: 900 x 300
+distribution <- subset(projects, select=c("domain"))
+names = c("Documentation", "Application", "System", "Non-web libs/frameworks", "Web libs/frameworks", "Tools")
+
+par(mar=c(2, 20, 0, 0) + 0.1, las=2)
+table <- table(distribution)
+barplot(sort(table), names.arg = names, cex.names=2, cex.axis= 2, horiz=TRUE, las=1)
+
+##############################################
+#    FIGURE: Proportion (Projects by license) #
+##############################################
+distribution <- subset(projects, select=c("has_license"))
+names = c("Hasn't License", "Has License")
+par(mar=c(2, 12, 0, 1) + 0.1, las=2)
+table <- table(distribution)
+barplot(sort(table), names.arg = names, cex.names=2, cex.axis= 2, horiz=TRUE, las=1)
 
 ##############################################
 #    FIGURE: Summary (Forks, Stars, Age) #
 ##############################################
-distribution <- subset(projects, select=c("forks_total","stars_total","open_issues_total"))
+distribution <- subset(projects, select=c("forks","stars","open_issues"))
 labels <- list("# Forks", "# Stars", "# Open Issues")
 DistributionBoxplot(1, 3, distribution, labels)
 
 ##########################################################
 #    FIGURE: Summary (Merged pull-requests, Commits) #
 ##########################################################
-distribution <- subset(projects, select=c("pulls_merged_total","commits_total"))
+distribution <- subset(projects, select=c("pulls_merged","commits"))
 labels <- list("# Pull-requests", "# Commits")
 DistributionBoxplot(1, 2, distribution, labels)
 
-##############################################
-#    FIGURE: Proportion (Projects by domain) #
-##############################################
-distribution <- subset(projects, select=c("application_domain"))
-ProportionBarplot(distribution)
 
 ##################################
 #    FIGURE: Correlation         #
@@ -100,34 +114,29 @@ ProportionBarplot(distribution)
 # we normalized the values using log10.
 
 # Correlation: Total of Newcomers x Stars
-column.x <- projects[["newcomers_total"]]
-column.y <- projects[["stars_total"]]
+column.x <- projects[["newcomers"]]
+column.y <- projects[["stars"]]
 CorrelationScatterplot(column.x, column.y, "# Newcomers", "# Stars")
 
 # Correlation: Total of Newcomers x Pull-requests
-column.x <- projects[["newcomers_total"]]
-column.y <- projects[["pulls_merged_total"]]
+column.x <- projects[["newcomers"]]
+column.y <- projects[["age"]]
 CorrelationScatterplot(column.x, column.y, "# Newcomers", "# Pull-requests (Merged)")
 
 # Correlation: Total of Newcomers x Forks
-column.x <- projects[["newcomers_total"]]
-column.y <- projects[["forks_total"]]
+column.x <- projects[["newcomers"]]
+column.y <- projects[["core_contributors"]]
 CorrelationScatterplot(column.x, column.y, "# Newcomers", "# Forks")
 
 # Correlation: Total of Newcomers x Commits
-column.x <- projects[["newcomers_total"]]
-column.y <- projects[["commits_total"]]
+column.x <- projects[["newcomers"]]
+column.y <- projects[["languages"]]
 CorrelationScatterplot(column.x, column.y, "# Newcomers", "# Commits")
 
 # Correlation: Total of Newcomers x Number of used languages
-column.x <- projects[["newcomers_total"]]
-column.y <- projects[["used_languages_total"]]
+column.x <- projects[["newcomers"]]
+column.y <- projects[["time_for_merge"]]
 CorrelationScatterplot(column.x, column.y, "# Newcomers", "# Prog. Languages")
-
-# Correlation: Total of Newcomers x Open issues
-column.x <- projects[["newcomers_total"]]
-column.y <- projects[["open_issues_total"]]
-CorrelationScatterplot(column.x, column.y, "# Newcomers", "# Open issues")
 
 #########################################################
 #       CLUSTERS: DIVIDED BY STRATIFICATION FACTORS     #

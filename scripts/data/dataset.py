@@ -134,13 +134,13 @@ def repositories_in_parallel(repository, dataset_folder, language):
     project = Parser(repository, folder, collector)
     # project.get_about()
     # project.get_languages()
-    project.get_pull_requests()
-    # project.get_commits()
+    # project.get_pull_requests()
+    project.get_commits()
     # project.get_stars()
     # project.get_forks()
     # project.get_readme()
     # project.get_contributing()
-    project.get_code_of_conduct()
+    # project.get_code_of_conduct()
 
 if __name__ == '__main__':
     api_client_id = str('4161a8257efaea420c94')

@@ -2,8 +2,7 @@ venv/
 dataset/
 .vscode/
 *.pyc
-error.log
 .Rproj.*
 .Rhistory
 .RData
-
+.Rproj.user

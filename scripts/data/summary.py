@@ -38,49 +38,22 @@ class Summary():
 
         return merged_list
 
-    def get_merged_code_churn(self):
-        pull_requests_file = json.load(open(self.folder + '/pull_requests.json', 'r'))
-        additions_minus_deletions = []
-
-        for line in pull_requests_file:
-            merged_date =  line['merged_at']
-
-            if merged_date is not None:
-                if 'additions' in line and 'deletions' in line:
-                    lines_added = int(line['additions'])
-                    lines_deleted = int(line['deletions'])
-
-                    additions_minus_deletions.append(lines_added - lines_deleted)
-
-        code_churn = sum(additions_minus_deletions)
-        return code_churn
-
     def get_time_for_merge(self):
         pull_requests_file = json.load(open(self.folder + '/pull_requests.json', 'r'))
         time_for_merge = []
 
         for line in pull_requests_file:
             merged_date =  line['merged_at']
+            created_date = line['created_at']
 
             if merged_date is not None:
                 merged_date = datetime.strptime(merged_date, '%Y-%m-%dT%H:%M:%SZ').date()
-                created_at = datetime.strptime(line['created_at'], '%Y-%m-%dT%H:%M:%SZ').date()
-                interval = abs(merged_date - created_at).days
+                created_date = datetime.strptime(created_date, '%Y-%m-%dT%H:%M:%SZ').date()
+                delta = merged_date - created_date
+                interval = delta.days
                 time_for_merge.append(interval)
 
         return time_for_merge
-
-    def get_time_for_first_review(self):
-        # TO-DO
-        return True
-
-    def get_reviews(self):
-        # TO-DO
-        return True
-
-    def get_reviews(self):
-        # TO-DO
-        return True
 
     def get_core_contributors(self):
         pull_requests_file = json.load(open(self.folder + '/pull_requests.json', 'r'))
@@ -183,16 +156,8 @@ class Summary():
         if repository['full_name'] in self.domains.keys():
             domain = self.domains[repository['full_name']]
         else:
-            domain = 'Other'
+            domain = 'Undefined'
         return domain
-
-    def get_license(self):
-        about_file = json.load(open(self.folder + '/about.json', 'r'))
-
-        if 'license' in about_file:
-            if about_file['license'] is not None:
-                return about_file['license']['name']
-        return 'Other'
 
     def get_used_languages(self):
         used_languages = json.load(open(self.folder + '/languages.json', 'r'))
@@ -214,6 +179,20 @@ class Summary():
         else:
             return False
 
+    def has_wiki(self):
+        about_file = json.load(open(self.folder + '/about.json', 'r'))
+        return about_file['has_wiki']
+         
+    def has_license(self):
+        about_file = json.load(open(self.folder + '/about.json', 'r'))
+
+        if 'license' in about_file:
+            if about_file['license'] is not None:
+                return True
+            else:
+                return False
+        return False
+        
 if __name__ == '__main__':
     dataset_folder = '../../dataset'
     csv_folder = '../../spreadsheets'
@@ -226,25 +205,23 @@ if __name__ == '__main__':
                   'owner',
                   'created_at',
                   'github_url',
-                  'pulls_merged_total',
-                  'commits_total',
-                  'stars_total',
-                  'forks_total',
+                  'pulls_merged',
+                  'commits',
+                  'stars',
+                  'forks',
                   'has_contributing',
                   'has_readme',
-                  'used_languages_total',
-                  'open_issues_total',
+                  'has_wiki',
+                  'has_license',
+                  'languages',
                   'age',
-                  'application_domain',
+                  'domain',
                   'main_language',
                   'owner_type',
-                  'software_license',
-                  'newcomers_total',
-                  'contributors_total',
-                  'core_contributors_total',
-                  'pull_merged_code_churn',
-                  'time_for_first_review_median',
-                  'time_for_merge_median']
+                  'newcomers',
+                  'contributors',
+                  'core_contributors',
+                  'time_for_merge']
 
     with open(csv_folder + '/summary.csv', 'w') as summary_file:
         writer = csv.DictWriter(summary_file, fieldnames=fieldnames)
@@ -262,46 +239,42 @@ if __name__ == '__main__':
             commit_total = project.get_commits()
             star_total = project.get_stars()
             fork_total = project.get_forks()
-            open_issues = repository['open_issues_count']
             used_languages = project.get_used_languages()
             has_contributing = project.has_contributing()
             has_readme = project.has_readme()
+            has_wiki = project.has_wiki()
+            has_software_license = project.has_license()
             owner_type = repository['owner']['type']
             main_language = repository['language']
             age = 2018 - int(created_at.year)
             application_domain = project.get_domain()
-            software_license = project.get_license()
             newcomers = project.get_newcomers()
             contributors = project.get_contributors()
             core_contributors = project.get_core_contributors()
-            pull_merged_code_churn = project.get_merged_code_churn()
-            time_for_first_review = project.get_time_for_first_review()
             time_for_merge = project.get_time_for_merge()
 
             with open(csv_folder + '/summary.csv', 'a') as summary_file:
                 writer = csv.DictWriter(summary_file, fieldnames=fieldnames)
-                data = {'name': repository['name'],
+                data = {'name': repository['full_name'],
                         'owner': repository['owner']['login'],
                         'created_at': created_at,
                         'github_url': repository['html_url'],
-                        'pulls_merged_total': len(numpy.nan_to_num(pull_merged_total)),
-                        'commits_total': len(numpy.nan_to_num(commit_total)),
-                        'stars_total': len(numpy.nan_to_num(star_total)),
-                        'forks_total': len(numpy.nan_to_num(fork_total)),
+                        'pulls_merged': len(numpy.nan_to_num(pull_merged_total)),
+                        'commits': len(numpy.nan_to_num(commit_total)),
+                        'stars': len(numpy.nan_to_num(star_total)),
+                        'forks': len(numpy.nan_to_num(fork_total)),
                         'has_contributing': has_contributing,
                         'has_readme': has_readme,
-                        'used_languages_total': len(used_languages),
-                        'open_issues_total': open_issues,
+                        'has_wiki': has_wiki,
+                        'has_license': has_software_license,
+                        'languages': len(used_languages),
                         'age': age,
-                        'application_domain': application_domain,
+                        'domain': application_domain,
                         'main_language': main_language,
                         'owner_type': owner_type,
-                        'software_license': software_license,
-                        'newcomers_total': len(numpy.nan_to_num(newcomers)),
-                        'contributors_total': len(numpy.nan_to_num(contributors)),
-                        'core_contributors_total': len(numpy.nan_to_num(core_contributors)),
-                        'pull_merged_code_churn': pull_merged_code_churn,
-                        'time_for_first_review_median': numpy.median(numpy.nan_to_num(time_for_first_review)),
-                        'time_for_merge_median': numpy.median(numpy.nan_to_num(time_for_merge))}
+                        'newcomers': len(numpy.nan_to_num(newcomers)),
+                        'contributors': len(numpy.nan_to_num(contributors)),
+                        'core_contributors': len(numpy.nan_to_num(core_contributors)),
+                        'time_for_merge': int(numpy.nan_to_num(numpy.average(time_for_merge)))}
 
                 writer.writerow(data)

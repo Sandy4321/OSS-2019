@@ -10,6 +10,18 @@ if (!require("oddsratio")) {
   install.packages("oddsratio", dependencies = TRUE)
   library("oddsratio")
 }
+if (!require("tidyverse")) {
+  install.packages("tidyverse", dependencies = TRUE)
+  library(tidyverse)
+}
+if (!require("magrittr")) {
+  install.packages("magrittr", dependencies = TRUE)
+  require("magrittr")
+}
+if (!require("rms")) {
+  install.packages("rms", dependencies = TRUE)
+  library("rms")
+}
 
 setwd("/mnt/SSD-DATA/FAPESP-2018")
 
@@ -40,11 +52,17 @@ projects <- read.csv("spreadsheets/summary.csv", header=TRUE,
                                   "core_members_total" = "numeric",
                                   "pulls_merged_code_churn" = "numeric",
                                   "time_for_first_review_median" = "numeric",
-                                  "time_for_merge_median" = "numeric"))
+                                  "time_for_merge_median" = "numeric",
+                                  "cluster"="numeric"))
 
-#############################################################
-#  TABLE: (SPEARMAN) Total Newcomers x Analytical Measures  #
-#############################################################
+projects %<>%
+  filter(newcomers_total != 0)
+
+quantile(projects$newcomers_total)
+
+#####################################
+#  Correlation Analysis (Spearman)  #
+#####################################
 # Total Newcomers x Stars
 cor.test(x=projects$newcomers_total, y=projects$stars_total, method='spearman')
 # Total Newcomers x Pull-requests
@@ -58,9 +76,9 @@ cor.test(x=projects$newcomers_total, y=projects$open_issues_total, method='spear
 # Total Newcomers x Used languages
 cor.test(x=projects$newcomers_total, y=projects$used_languages_total, method='spearman')
 
-########################################################################################
-#  TABLE: (Wilcox & Cliffs) Total Newcomers (Divided by median) x Analytical Measures  #
-########################################################################################
+############################################
+# Effect Size Analysis ((Wilcox & Cliffs)  #
+############################################
 newcomers.median <- median(projects$newcomers_total)
 projects.under.median <- projects[which(projects$newcomers_total < newcomers.median),]
 projects.above.median <- projects[which(projects$newcomers_total >= newcomers.median),]

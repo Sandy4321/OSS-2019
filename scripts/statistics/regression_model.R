@@ -1,15 +1,3 @@
-# The class of gamma regression models is based on the assumption that the dependent
-# variable is gamma distributed and that its mean is related to a set of regressors
-# through a linear predictor with unknown coefficients and a link function. This link
-# can be the identity, the inverse or the logarithm function. The model also includes
-# a shape parameter, which may be constant or dependent on a set of regressors
-# through a link function, as the logarithm function.
-
-# The class of beta regression models is commonly used by practitioners to model variables
-# that assume values in the standard unit interval (0, 1). It is based on the assumption
-# that the dependent variable is beta-distributed and that its mean is related to a set of
-# regressors through a linear predictor with unknown coefficients and a link function
-
 #########################################################
 #     Installing and loading required packages          #
 #########################################################
@@ -22,6 +10,14 @@ if (!require("tidyverse")) {
   install.packages("tidyverse", dependencies = TRUE)
   library(tidyverse)
 }
+if (!require("dummies")) {
+  install.packages("dummies", dependencies = TRUE)
+  library(dummies)
+}
+if (!require("apcluster")) {
+  install.packages("apcluster", dependencies = TRUE)
+  library(apcluster)
+}
 if (!require("magrittr")) {
   install.packages("magrittr", dependencies = TRUE)
   require("magrittr")
@@ -31,7 +27,7 @@ if (!require("rms")) {
   library("rms")
 }
 
-setwd("/mnt/SSD-DATA/FAPESP-2018")
+setwd("/mnt/SSD-DATA/oss-2019")
 
 #########################################################
 #                 Loading Dataset                       #
@@ -42,76 +38,70 @@ projects <- read.csv("spreadsheets/summary.csv", header=TRUE,
                                   "owner" = "character",
                                   "created_at" = "character",
                                   "github_url" = "character",
-                                  "pulls_merged_total" = "numeric",
-                                  "pulls_merged_code_churn" = "numeric",
-                                  "commits_total" = "numeric",
-                                  "stars_total" = "numeric",
-                                  "forks_total" = "numeric",
+                                  "pulls_merged" = "numeric",
+                                  "commits" = "numeric",
+                                  "stars" = "numeric",
+                                  "forks" = "numeric",
                                   "has_contributing" = "logical",
                                   "has_readme" = "logical",
-                                  "used_languages_total" = "numeric",
-                                  "open_issues_total" = "numeric",
+                                  "languages" = "numeric",
                                   "age" = "numeric",
-                                  "application_domain" = "character",
+                                  "domain" = "character",
                                   "main_language" = "character",
                                   "owner_type" = "character",
-                                  "software_license" = "character",
-                                  "newcomers_total" = "numeric",
-                                  "contributors_total" = "numeric",
-                                  "core_members_total" = "numeric",
-                                  "time_for_first_review_median" = "numeric",
-                                  "time_for_merge_median" = "numeric"
-                                  ))
+                                  "license" = "character",
+                                  "newcomers" = "numeric",
+                                  "contributors" = "numeric",
+                                  "core_contributors" = "numeric",
+                                  "cluster" = "numeric"))
 
 projects %<>%
-  filter(newcomers_total != 0)
+  filter(newcomers != 0)
 
 projects %<>% 
-  mutate(agecat = case_when(
-    age < 4 ~ "young",
-    age > 3 & age < 8 ~ "adult",
-    age > 7 ~ "old"))
+  mutate(age = case_when(
+    age < 4 ~ "Young",
+    age > 3 & age < 8 ~ "Adult",
+    age > 7 ~ "Old"))
 
 projects %<>%
-  mutate(licensecat = case_when(
-    software_license == "MIT License" | software_license == "BSD 2-Clause \"Simplified\" License" | software_license == "Creative Commons Attribution 4.0" | software_license == "Creative Commons Attribution 4.0 International" | software_license == "BSD 3-Clause \"New\" or \"Revised\" License" | software_license == "Apache License 2.0" | software_license == "Do What The F*ck You Want To Public License" | software_license == "ISC License" | software_license == "Artistic License 2.0" ~ "Permissive",
-    software_license == "GNU General Public License v3.0" | software_license == "GNU General Public License v2.0" | software_license == "GNU Affero General Public License v3.0" ~ "TotalReciprocal",
-    software_license == "Mozilla Public License 2.0" | software_license == "Eclipse Public License 1.0" | software_license == "GNU Lesser General Public License v2.1" | software_license == "GNU Lesser General Public License v2.1" | software_license == "The Unlicense" ~ "PartialReciprocal",
-    software_license == "Other" | software_license == "NOASSERTION" ~ "Others"))
+  mutate(license = case_when(
+    license == "MIT License" | license == "BSD 2-Clause \"Simplified\" License" | license == "Creative Commons Attribution 4.0" | license == "Creative Commons Attribution 4.0 International" | license == "BSD 3-Clause \"New\" or \"Revised\" License" | license == "Apache License 2.0" | license == "Do What The F*ck You Want To Public License" | license == "ISC License" | license == "Artistic License 2.0" ~ "Permissive",
+    license == "GNU General Public License v3.0" | license == "GNU General Public License v2.0" | license == "GNU Affero General Public License v3.0" ~ "TotalReciprocal",
+    license == "Mozilla Public License 2.0" | license == "Eclipse Public License 1.0" | license == "GNU Lesser General Public License v2.1" | license == "GNU Lesser General Public License v2.1" | license == "The Unlicense" ~ "PartialReciprocal",
+    license == "Other" | license == "NOASSERTION" ~ "Others"))
 
 #########################################################
 #       High Correlation and Redundancy Analysis        #
 #########################################################
 
-explanatory.variables <- c("agecat", "main_language", "forks_total", "pulls_merged_total", "owner_type", "core_members_total")
-hierarchal.tree <- varclus(~ ., data=projects[,explanatory.variables], trans="abs")
-# To detect high correlated variables, we use Spearman coefficient. Variables with high correlation (p > 0.7) can be removed.
+independent.variables <- projects[,c("age", "languages", "forks", "stars", "core_contributors", "owner_type", "license", "domain", "has_readme", "has_contributing")]
+
+hierarchal.tree <- varclus(~., data=independent.variables)
 spearman.threshold <- 0.7
 plot(hierarchal.tree)
 abline(h=1 - spearman.threshold, col="red", lty=2)
 
-redundant.variables <- redun(~., data=projects[,explanatory.variables], nk=0)
-# To detect redundant variables, we use the redun function. Redundant variables (R^2  > 0.9) can be removed.
-print(redundant.variables)
+redundant.variables <- redun(~., data=independent.variables, nk=0)
+print(redundant.variables) # Redundant variables (R^2  > 0.9) can be removed.
 
 #########################################################
 #                   Regression Model                    #
 #########################################################
+# The class of gamma regression models is based on the assumption that the dependent
+# variable is gamma distributed and that its mean is related to a set of regressors
+# through a linear predictor with unknown coefficients and a link function. This link
+# can be the identity, the inverse or the logarithm function. The model also includes
+# a shape parameter, which may be constant or dependent on a set of regressors
+# through a link function, as the logarithm function.
 
-fit_project <- gamlss(newcomers_total ~ agecat + application_domain + licensecat + main_language + owner_type, data = projects, family = GA())
-
+projects = na.omit(projects)
+fit_project <- gamlss(newcomers ~ age + languages + forks + stars + core_contributors + owner_type + license + domain + has_readme + has_contributing, data = projects, family = GA())
+predict(fit_project)
 plot(fit_project)
 summary(fit_project)
 
-# Mostrar variações para Milene. Ao adicionar e remover variáveis os resultados mudam drasticamente.
-# O modelo como está no momento é um dos mais estáveis que conseguimos.
-
-# Calcular correlação das variáveis independentes com a dependente
-# É necessário? Seria uma boa estratégia para remover variáveis altamente correlacionadas com a dependente?
-
 # Usar o tamanho do software como variável independente (por loc) ***
-
-# Adicionar readme e contributing como variáveis independentes
 
 #########################################################
 #                      References                       #
