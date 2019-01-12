@@ -46,6 +46,15 @@ class Parser():
         else:
             print(self.repository['name'] + ' already contains a languages file. Skipping.')
 
+    def get_community_metrics(self):
+        if not os.path.isfile(self.folder + '/metrics.json'):
+            metrics = self.collector.community_metrics()
+
+            with open(self.folder + '/metrics.json', 'w') as metrics_file:
+                json.dump(metrics, metrics_file)
+        else:
+            print(self.repository['name'] + ' already contains a metrics file. Skipping.')
+
     def get_stars(self):
         if not os.path.isfile(self.folder + '/stars.json'):
             stars = self.collector.stars()
@@ -85,36 +94,6 @@ class Parser():
         except:
             print("Problema nos pull_requests!")
                 
-    def get_readme(self):
-        if not os.path.isfile(self.folder + '/readme.json'):
-            readme = self.collector.readme()
-
-            with open(self.folder + '/readme.json', 'w') as readme_file:
-                json.dump(readme, readme_file)
-        else:
-            print(self.repository['name'] + ' already contains a readme file. Skipping.')
-
-    def get_contributing(self):
-        if not os.path.isfile(self.folder + '/contributing.json'):
-            contributing = self.collector.contributing()
-
-            with open(self.folder + '/contributing.json', 'w') as contributing_file:
-                json.dump(contributing, contributing_file)
-        else:
-            print(self.repository['name'] + ' already contains a contributing file. Skipping.')
-
-    def get_code_of_conduct(self):
-        try:
-            if not os.path.isfile(self.folder + '/code_of_conduct.json'):
-                code_of_conduct = self.collector.code_of_conduct()
-
-                with open(self.folder + '/code_of_conduct.json', 'w') as code_of_conduct_file:
-                    json.dump(code_of_conduct, code_of_conduct_file)
-            else:
-                print(self.repository['name'] + ' already contains a code of conduct file. Skipping.')
-        except:
-            print("Problema no code of conduct!")
-
 def popular_projects_per_language(languages, dataset_folder, collector):
     search = GitHubSearch.Search(collector)
     repositories = {}
@@ -135,12 +114,10 @@ def repositories_in_parallel(repository, dataset_folder, language):
     # project.get_about()
     # project.get_languages()
     # project.get_pull_requests()
-    project.get_commits()
+    # project.get_commits()
     # project.get_stars()
     # project.get_forks()
-    # project.get_readme()
-    # project.get_contributing()
-    # project.get_code_of_conduct()
+    project.get_community_metrics()
 
 if __name__ == '__main__':
     api_client_id = str('4161a8257efaea420c94')

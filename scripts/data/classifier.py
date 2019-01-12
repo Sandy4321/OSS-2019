@@ -1,23 +1,22 @@
 import pandas as pd  
 import numpy as np 
 
-from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import confusion_matrix
-from sklearn.externals import joblib
 from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 from sklearn.feature_selection import SelectFromModel
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import StratifiedShuffleSplit
+from sklearn.externals.joblib import dump, load
 
 class RandomForest():
     def __init__(self, dataset):
         self.encoder = LabelEncoder()
         self.dataset = dataset.apply(LabelEncoder().fit_transform)
 
-        self.x_labels = ['age', 'stars', 'languages', 'main_language', 'owner_type', 'core_contributors', 'has_license', 'domain', 'has_readme', 'has_contributing', 'has_wiki', 'time_for_merge']
+        self.x_labels = ['age', 'stars', 'languages', 'main_language', 'owner_type', 'core_contributors', 'has_license', 'domain', 'has_contributing', 'has_wiki', 'time_for_merge', 'has_code_of_conduct', 'has_issue_template', 'has_pull_request_template']
         self.y_label = ['cluster']
 
         self.x = self.dataset[self.x_labels]
@@ -59,35 +58,24 @@ class RandomForest():
         classifier = RandomForestClassifier(n_estimators = 50, random_state = 46)
         classifier.fit(self.x_train, self.y_train.ravel())
 
-        '''
-        ('stars', 0.19078521342857344)
-        ('time_for_merge', 0.15183768399599212)
-        ('core_contributors', 0.11803287754298111)
-        ('age', 0.1114337600451946)
-        ('languages', 0.11112598934025578)
-        ('main_language', 0.1076871666749779)
-        ('domain', 0.08008741290250447)
-        ('has_contributing', 0.03816656529616988)
-        ('owner_type', 0.025743846806127405)
-        ('has_license', 0.02544065380868748)
-        ('has_readme', 0.00771392259245028)
-        ('has_wiki', 0.031944907566085465)
-        '''
-
-        sfm = SelectFromModel(classifier)
-        sfm.fit(self.x_train, self.y_train)
-
-        for feature_list_index in sfm.get_support(indices=True):
-            print(self.x_labels[feature_list_index])
-
         y_pred = classifier.predict(self.x_test)
+        
+        print('Saving the classifier model in "classifier.joblib" file')
+        dump(classifier, 'classifier.joblib')
 
-        for feature in zip(self.x_labels, classifier.feature_importances_):
-            print(feature)
-  
-        print(classification_report(self.y_test, y_pred))  
-        print(accuracy_score(self.y_test, y_pred))
+        with open('classifier_report.txt', 'w') as report_file:
+            report_file.write('# Classification Report:\n')
+            report_file.write(classification_report(self.y_test, y_pred))
+            print(classification_report(self.y_test, y_pred))
 
+            report_file.write('\n# Accuracy Score:\n')
+            report_file.write(str(accuracy_score(self.y_test, y_pred)))
+            print(accuracy_score(self.y_test, y_pred))
+
+            report_file.write('\n\n# Feature Importances:\n')
+            for importance in zip(self.x_labels, classifier.feature_importances_):
+                report_file.write(str(importance) + '\n')
+                print(importance)
 
 dataset = pd.read_csv('../../spreadsheets/summary.csv') 
 random_forest = RandomForest(dataset)

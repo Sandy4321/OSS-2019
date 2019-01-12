@@ -35,23 +35,20 @@ projects <- read.csv("spreadsheets/summary.csv", header=TRUE,
                                   "forks" = "numeric",
                                   "has_contributing" = "logical",
                                   "has_readme" = "logical",
+                                  "has_wiki" = "logical",
+                                  "has_code_of_conduct" = "logical",
+                                  "has_pull_requests_template" = "logical",
+                                  "has_issues_template" = "logical",
+                                  "has_documentation_link" = "logical",
+                                  "has_license" = "logical",
                                   "languages" = "numeric",
                                   "age" = "numeric",
                                   "domain" = "character",
                                   "main_language" = "character",
                                   "owner_type" = "character",
-                                  "has_license" = "logical",
                                   "newcomers" = "numeric",
                                   "contributors" = "numeric",
                                   "core_contributors" = "numeric"))
-
-
-no_readme <- projects[which(projects$has_readme == FALSE),]
-no_contributing <- projects[which(projects$has_contributing == FALSE),]
-no_license <- projects[which(projects$has_license == FALSE),]
-write.csv(no_readme$github_url, file="hasnt_readme.csv")
-write.csv(no_license$github_url, file="hasnt_license.csv")
-write.csv(no_contributing$github_url, file="hasnt_contributing")
 
 DistributionBoxplot <- function(n.rows, n.columns, columns, labels) {
     par(mfrow=c(n.rows, n.columns))
@@ -82,13 +79,13 @@ table <- table(distribution)
 barplot(sort(table), names.arg = names, cex.names=2, cex.axis= 2, horiz=TRUE, las=1)
 
 ##############################################
-#    FIGURE: Proportion (Projects by license) #
+#    FIGURE: Proportion (Projects by age) #
 ##############################################
-distribution <- subset(projects, select=c("has_license"))
-names = c("Hasn't License", "Has License")
-par(mar=c(2, 12, 0, 1) + 0.1, las=2)
+distribution <- subset(projects, select=c("age"))
+
+par(mar=c(2, 5, 0, 0) + 0.1, las=2)
 table <- table(distribution)
-barplot(sort(table), names.arg = names, cex.names=2, cex.axis= 2, horiz=TRUE, las=1)
+barplot(sort(table), cex.names=2, cex.axis= 2, horiz=TRUE, las=1, ylab="Years", cex.lab=2)
 
 ##############################################
 #    FIGURE: Summary (Forks, Stars, Age) #

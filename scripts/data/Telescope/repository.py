@@ -21,48 +21,6 @@ class Repository:
         print('[Repository] Returning languages used in the project')
         return self.github.request('repos/' + self.organization + '/' + self.name + '/languages')
 
-    def readme(self):
-        print('[Repository] Returning README available in ' + self.name)
-
-        files = []
-        filenames = ['README.md', 'README', 'README.markdown', 'README.MD']
-
-        for filename in filenames:
-            readme = self.github.request('repos/' + self.organization + '/' + self.name + '/contents/' + filename)
-
-            if readme:
-                files.append(readme)
-
-        return files
-
-    def contributing(self):
-        print('[Repository] Returning CONTRIBUTING available in ' + self.name)
-
-        files = []
-        filenames = ['CONTRIBUTING.md', 'CONTRIBUTING', 'CONTRIBUTING.markdown', 'CONTRIBUTING.MD']
-
-        for filename in filenames:
-            contributing = self.github.request('repos/' + self.organization + '/' + self.name + '/contents/' + filename)
-
-            if contributing:
-                files.append(contributing)
-
-        return files
-
-    def code_of_conduct(self):
-        print('[Repository] Returning CODE_OF_CONDUCT available in ' + self.name)
-
-        files = []
-        filenames = ['CODE_OF_CONDUCT.md', 'CODE_OF_CONDUCT', 'CODE_OF_CONDUCT.markdown', 'CODE_OF_CONDUCT.MD']
-
-        for filename in filenames:
-            code_of_conduct = self.github.request('repos/' + self.organization + '/' + self.name + '/contents/' + filename)
-
-            if code_of_conduct:
-                files.append(code_of_conduct)
-
-        return files
-
     def commit(self, sha):
         print('[Repository] Returning commit ' + str(sha) + ' in ' + self.name)
         return self.github.request('repos/' + self.organization + '/' + self.name + '/commits/' + str(sha))
@@ -74,6 +32,10 @@ class Repository:
     def issue(self, number):
         print('[Repository] Returning issue #' + str(number) + ' in ' + self.name)
         return self.github.request('repos/' + self.organization + '/' + self.name + '/issues/' + str(number))
+    
+    def community_metrics(self):
+        print('[Repository] Returning community metrics of project ' + self.name)
+        return self.github.request('repos/' + self.organization + '/' + self.name + '/community/profile')
 
     def commits(self, sha=None, path=None, author=None, since=None, until=None, page_range={}):
         print('[Repository] Returning commits available in ' + self.name)

@@ -4,8 +4,6 @@
 __author__ =  'Felipe Fronchetti'
 __contact__ = 'fronchetti@usp.br'
 
-# TO-DO: Core contributors are found using merged pull-requests. The problem is, not all the projects are using the pull-request system.
-
 import os
 import csv
 import json
@@ -24,19 +22,6 @@ class Summary():
 
             for domain in domains:
                 self.domains[domain['name']] = domain['domain']
-
-    def get_pull_requests_merged(self):
-        pull_requests_file = json.load(open(self.folder + '/pull_requests.json', 'r'))
-        merged_list = []
-
-        for line in pull_requests_file:
-            merged_date =  line['merged_at']
-
-            if merged_date is not None:
-                merged_date = datetime.strptime(merged_date, '%Y-%m-%dT%H:%M:%SZ').date()
-                merged_list.append(merged_date)
-
-        return merged_list
 
     def get_time_for_merge(self):
         pull_requests_file = json.load(open(self.folder + '/pull_requests.json', 'r'))
@@ -73,24 +58,6 @@ class Summary():
                         core_contributors.append(core_member)
 
         return core_contributors
-
-    def get_commits(self):
-        commits_file = json.load(open(self.folder + '/commits.json', 'r'))
-        commits_list = []
-
-        about_file = json.load(open(self.folder + '/about.json', 'r'))
-        created_at = datetime.strptime(about_file['created_at'], '%Y-%m-%dT%H:%M:%SZ') + relativedelta(months=6)
-
-        for line in commits_file:
-            commit_date = line['commit']['author']['date']
-
-            if commit_date is not None:
-                commit_date = datetime.strptime(commit_date, '%Y-%m-%dT%H:%M:%SZ').date()
-
-                if commit_date >= created_at.date():
-                    commits_list.append(commit_date)
-
-        return commits_list
 
     def get_newcomers(self):
         commits_file = json.load(open(self.folder + '/commits.json', 'r'))
@@ -164,17 +131,49 @@ class Summary():
         return used_languages
 
     def has_readme(self):
-        readme = json.load(open(self.folder + '/readme.json', 'r'))
+        metrics = json.load(open(self.folder + '/metrics.json', 'r'))
 
-        if readme:
+        if metrics['files']['readme'] is not None:
             return True
         else:
             return False
 
     def has_contributing(self):
-        contributing = json.load(open(self.folder + '/contributing.json', 'r'))
+        metrics = json.load(open(self.folder + '/metrics.json', 'r'))
 
-        if contributing:
+        if metrics['files']['contributing'] is not None:
+            return True
+        else:
+            return False
+
+    def has_code_of_conduct(self):
+        metrics = json.load(open(self.folder + '/metrics.json', 'r'))
+
+        if metrics['files']['code_of_conduct'] is not None:
+            return True
+        else:
+            return False
+
+    def has_license(self):
+        metrics = json.load(open(self.folder + '/metrics.json', 'r'))
+
+        if metrics['files']['license'] is not None:
+            return True
+        else:
+            return False
+
+    def has_pull_request_template(self):
+        metrics = json.load(open(self.folder + '/metrics.json', 'r'))
+
+        if metrics['files']['pull_request_template'] is not None:
+            return True
+        else:
+            return False
+
+    def has_issue_template(self):
+        metrics = json.load(open(self.folder + '/metrics.json', 'r'))
+
+        if metrics['files']['issue_template'] is not None:
             return True
         else:
             return False
@@ -182,17 +181,7 @@ class Summary():
     def has_wiki(self):
         about_file = json.load(open(self.folder + '/about.json', 'r'))
         return about_file['has_wiki']
-         
-    def has_license(self):
-        about_file = json.load(open(self.folder + '/about.json', 'r'))
 
-        if 'license' in about_file:
-            if about_file['license'] is not None:
-                return True
-            else:
-                return False
-        return False
-        
 if __name__ == '__main__':
     dataset_folder = '../../dataset'
     csv_folder = '../../spreadsheets'
@@ -205,12 +194,13 @@ if __name__ == '__main__':
                   'owner',
                   'created_at',
                   'github_url',
-                  'pulls_merged',
-                  'commits',
                   'stars',
                   'forks',
                   'has_contributing',
                   'has_readme',
+                  'has_code_of_conduct',
+                  'has_pull_request_template',
+                  'has_issue_template',
                   'has_wiki',
                   'has_license',
                   'languages',
@@ -235,15 +225,16 @@ if __name__ == '__main__':
             project = Summary(repository, project_folder)
 
             created_at = datetime.strptime(repository['created_at'], '%Y-%m-%dT%H:%M:%SZ').date()
-            pull_merged_total = project.get_pull_requests_merged()
-            commit_total = project.get_commits()
             star_total = project.get_stars()
             fork_total = project.get_forks()
             used_languages = project.get_used_languages()
             has_contributing = project.has_contributing()
             has_readme = project.has_readme()
+            has_code_of_conduct = project.has_code_of_conduct()
+            has_pull_request_template = project.has_pull_request_template()
+            has_issue_template = project.has_issue_template()
             has_wiki = project.has_wiki()
-            has_software_license = project.has_license()
+            has_license = project.has_license()
             owner_type = repository['owner']['type']
             main_language = repository['language']
             age = 2018 - int(created_at.year)
@@ -259,14 +250,15 @@ if __name__ == '__main__':
                         'owner': repository['owner']['login'],
                         'created_at': created_at,
                         'github_url': repository['html_url'],
-                        'pulls_merged': len(numpy.nan_to_num(pull_merged_total)),
-                        'commits': len(numpy.nan_to_num(commit_total)),
                         'stars': len(numpy.nan_to_num(star_total)),
                         'forks': len(numpy.nan_to_num(fork_total)),
                         'has_contributing': has_contributing,
                         'has_readme': has_readme,
+                        'has_code_of_conduct': has_code_of_conduct,
+                        'has_pull_request_template': has_pull_request_template,
+                        'has_issue_template': has_issue_template,
                         'has_wiki': has_wiki,
-                        'has_license': has_software_license,
+                        'has_license': has_license,
                         'languages': len(used_languages),
                         'age': age,
                         'domain': application_domain,

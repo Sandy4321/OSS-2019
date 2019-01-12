@@ -33,6 +33,9 @@ class Collector:
             if 'stargazer' in github_url:
                 request.add_header('Accept','application/vnd.github.v3.star+json')
 
+            if 'community' in github_url:
+                request.add_header('Accept','application/vnd.github.black-panther-preview+json')
+
             response = urllib2.urlopen(request)
             response_body = json.load(response)
             response_header = response.info()
