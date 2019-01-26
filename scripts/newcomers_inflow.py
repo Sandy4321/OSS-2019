@@ -117,7 +117,7 @@ class NewcomersInflow():
 
 if __name__ == '__main__':
     dataset_folder = '../dataset'
-    csv_folder = '../spreadsheets'
+    csv_folder = '../tables'
 
     if os.path.isfile(dataset_folder + '/projects.json'):
         with open(dataset_folder + '/projects.json', 'r') as projects_file:

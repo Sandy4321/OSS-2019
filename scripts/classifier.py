@@ -83,5 +83,5 @@ class RandomForest():
             report_file.write(str(accuracy_score(self.y_test, y_pred)))
             print(accuracy_score(self.y_test, y_pred))
 
-dataset = pd.read_csv('../spreadsheets/summary.csv') 
+dataset = pd.read_csv('../tables/summary.csv') 
 random_forest = RandomForest(dataset)

@@ -159,7 +159,7 @@ class KSC(object):
 
 if __name__ == '__main__':
     dataset_folder = '../dataset'
-    csv_folder = '../spreadsheets'
+    csv_folder = '../tables'
     images_folder = '../plots/'
 
     newcomers_inflow_file = open(csv_folder + '/newcomers_inflow.csv' , 'r')

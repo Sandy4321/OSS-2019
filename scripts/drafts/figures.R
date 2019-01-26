@@ -24,7 +24,7 @@ setwd("/mnt/SSD-DATA/oss-2019")
 #                 Loading Dataset                       #
 #########################################################
 
-projects <- read.csv("spreadsheets/summary.csv", header=TRUE,
+projects <- read.csv("tables/summary.csv", header=TRUE,
                      colClasses=c("name" = "character",
                                   "owner" = "character",
                                   "created_at" = "character",

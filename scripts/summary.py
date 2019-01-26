@@ -17,7 +17,7 @@ class Summary():
         self.folder = folder
         self.domains = {}
 
-        with open('../spreadsheets/domains.csv', 'r') as domains_file:
+        with open('../tables/domains.csv', 'r') as domains_file:
             domains = csv.DictReader(domains_file)
 
             for domain in domains:
@@ -184,7 +184,7 @@ class Summary():
 
 if __name__ == '__main__':
     dataset_folder = '../dataset'
-    csv_folder = '../spreadsheets'
+    csv_folder = '../tables'
 
     if os.path.isfile(dataset_folder + '/projects.json'):
         with open(dataset_folder + '/projects.json', 'r') as projects_file:
