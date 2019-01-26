@@ -162,7 +162,7 @@ if __name__ == '__main__':
     csv_folder = '../tables'
     images_folder = '../plots/'
 
-    newcomers_inflow_file = open(csv_folder + '/newcomers_inflow.csv' , 'r')
+    newcomers_inflow_file = open(csv_folder + '/inflow.csv' , 'r')
     newcomers_inflow = DictReader(newcomers_inflow_file)
     projects = []
     time_series = []

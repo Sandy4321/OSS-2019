@@ -95,7 +95,7 @@ class NewcomersInflow():
                 fieldnames.append(week)
             weekly_min += step
         
-        with open(self.csv_folder + '/newcomers_inflow.csv', 'w') as inflow_file:
+        with open(self.csv_folder + '/inflow.csv', 'w') as inflow_file:
             writer = csv.DictWriter(inflow_file, fieldnames=['project'] + fieldnames)
             writer.writeheader()
         
@@ -111,7 +111,7 @@ class NewcomersInflow():
                         number_of_newcomers = number_of_newcomers + 1
                 inflow[week] = number_of_newcomers
 
-            with open(self.csv_folder + '/newcomers_inflow.csv', 'a') as inflow_file:
+            with open(self.csv_folder + '/inflow.csv', 'a') as inflow_file:
                 writer = csv.DictWriter(inflow_file, fieldnames=['project'] + fieldnames)
                 writer.writerow(inflow)
 
