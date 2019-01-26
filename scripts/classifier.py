@@ -1,6 +1,11 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+__author__ =  'Felipe Fronchetti'
+__contact__ = 'fronchetti@usp.br'
+
 import pandas as pd  
 import numpy as np 
-
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import confusion_matrix
@@ -16,7 +21,7 @@ class RandomForest():
         self.encoder = LabelEncoder()
         self.dataset = dataset.apply(LabelEncoder().fit_transform)
 
-        self.x_labels = ['age', 'stars', 'languages', 'main_language', 'owner_type', 'core_contributors', 'has_license', 'domain', 'has_contributing', 'has_wiki', 'time_for_merge', 'has_code_of_conduct', 'has_issue_template', 'has_pull_request_template']
+        self.x_labels = ['age', 'stars', 'languages', 'main_language', 'owner_type', 'integrators', 'has_license', 'domain', 'has_contributing', 'has_wiki', 'time_for_merge', 'has_code_of_conduct', 'has_issue_template', 'has_pull_request_template']
         self.y_label = ['cluster']
 
         self.x = self.dataset[self.x_labels]
@@ -24,7 +29,7 @@ class RandomForest():
         
         self.remove_high_correlation()
 
-        stratified_split = StratifiedShuffleSplit(n_splits=1, test_size=0.25)
+        stratified_split = StratifiedShuffleSplit(n_splits=1, test_size=0.3)
         stratified_split.get_n_splits(self.x.values, self.y.values)
         
 
@@ -63,19 +68,20 @@ class RandomForest():
         print('Saving the classifier model in "classifier.joblib" file')
         dump(classifier, 'classifier.joblib')
 
-        with open('classifier_report.txt', 'w') as report_file:
+        print('Saving the classifier output in "classification-report.txt" file')
+        with open('classification-report.txt', 'w') as report_file:
             report_file.write('# Classification Report:\n')
             report_file.write(classification_report(self.y_test, y_pred))
             print(classification_report(self.y_test, y_pred))
+
+            report_file.write('\n# Feature Importances:\n')
+            for importance in zip(self.x_labels, classifier.feature_importances_):
+                report_file.write(str(importance) + '\n')
+                print(importance)
 
             report_file.write('\n# Accuracy Score:\n')
             report_file.write(str(accuracy_score(self.y_test, y_pred)))
             print(accuracy_score(self.y_test, y_pred))
 
-            report_file.write('\n\n# Feature Importances:\n')
-            for importance in zip(self.x_labels, classifier.feature_importances_):
-                report_file.write(str(importance) + '\n')
-                print(importance)
-
-dataset = pd.read_csv('../../spreadsheets/summary.csv') 
+dataset = pd.read_csv('../spreadsheets/summary.csv') 
 random_forest = RandomForest(dataset)

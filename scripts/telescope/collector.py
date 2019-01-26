@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 __author__ =  'Felipe Fronchetti'
@@ -7,8 +8,6 @@ import urllib2
 import time
 from datetime import datetime
 import json
-
-# TO-DO: Handle internet connection. Maybe a good idea is to use requests instead of urllib2.
 
 class Collector:
 

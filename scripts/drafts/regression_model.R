@@ -1,5 +1,8 @@
+# Author: Felipe Fronchetti
+# E-mail: fronchetti@usp.br
+
 #########################################################
-#     Installing and loading required packages          #
+#                 Loading Packages                      #
 #########################################################
 
 if (!require("gamlss")) {
@@ -38,23 +41,24 @@ projects <- read.csv("spreadsheets/summary.csv", header=TRUE,
                                   "owner" = "character",
                                   "created_at" = "character",
                                   "github_url" = "character",
-                                  "pulls_merged" = "numeric",
-                                  "commits" = "numeric",
                                   "stars" = "numeric",
                                   "forks" = "numeric",
                                   "has_contributing" = "logical",
                                   "has_readme" = "logical",
+                                  "has_wiki" = "logical",
+                                  "has_code_of_conduct" = "logical",
+                                  "has_pull_request_template" = "logical",
+                                  "has_issue_template" = "logical",
+                                  "has_license" = "logical",
                                   "languages" = "numeric",
                                   "age" = "numeric",
                                   "domain" = "character",
                                   "main_language" = "character",
                                   "owner_type" = "character",
-                                  "license" = "character",
                                   "newcomers" = "numeric",
                                   "contributors" = "numeric",
-                                  "core_contributors" = "numeric",
-                                  "cluster" = "numeric"))
-
+                                  "integrators" = "numeric",
+                                  "time_for_merge" = "numeric"))
 projects %<>%
   filter(newcomers != 0)
 
@@ -75,7 +79,7 @@ projects %<>%
 #       High Correlation and Redundancy Analysis        #
 #########################################################
 
-independent.variables <- projects[,c("age", "languages", "forks", "stars", "core_contributors", "owner_type", "license", "domain", "has_readme", "has_contributing")]
+independent.variables <- projects[,c("age", "languages", "forks", "stars", "integrators", "owner_type", "license", "domain", "has_readme", "has_contributing")]
 
 hierarchal.tree <- varclus(~., data=independent.variables)
 spearman.threshold <- 0.7
@@ -96,19 +100,8 @@ print(redundant.variables) # Redundant variables (R^2  > 0.9) can be removed.
 # through a link function, as the logarithm function.
 
 projects = na.omit(projects)
-fit_project <- gamlss(newcomers ~ age + languages + forks + stars + core_contributors + owner_type + license + domain + has_readme + has_contributing, data = projects, family = GA())
+fit_project <- gamlss(newcomers ~ age + languages + forks + stars + integrators + owner_type + license + domain + has_readme + has_contributing, data = projects, family = GA())
 predict(fit_project)
 plot(fit_project)
 summary(fit_project)
 
-# Usar o tamanho do software como variável independente (por loc) ***
-
-#########################################################
-#                      References                       #
-#########################################################
-# Licenses Categorization:
-# http://www.teses.usp.br/teses/disponiveis/45/45134/tde-14032012-003454/pt-br.php (Paper)
-
-# Clustering Variables (Varclus):
-# https://rpubs.com/pjmurphy/269609 (Tutorial)
-# https://www.jstatsoft.org/article/view/v050i13/v50i13.pdf (Paper)

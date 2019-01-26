@@ -1,4 +1,4 @@
-name,owner,created_at,github_url,stars,forks,has_contributing,has_readme,has_code_of_conduct,has_pull_request_template,has_issue_template,has_wiki,has_license,languages,age,domain,main_language,owner_type,newcomers,contributors,core_contributors,time_for_merge,cluster
+name,owner,created_at,github_url,stars,forks,has_contributing,has_readme,has_code_of_conduct,has_pull_request_template,has_issue_template,has_wiki,has_license,languages,age,domain,main_language,owner_type,newcomers,contributors,integrators,time_for_merge,cluster
 torvalds/linux,torvalds,2011-09-04,https://github.com/torvalds/linux,39990,19840,False,True,False,False,False,False,True,19,7,System software,C,User,7635,7636,1,213,1
 antirez/redis,antirez,2009-03-21,https://github.com/antirez/redis,31812,8468,True,True,False,False,False,False,True,8,9,System software,C,User,333,339,3,42,1
 firehol/netdata,firehol,2013-06-17,https://github.com/firehol/netdata,31969,2669,True,True,True,True,True,True,True,13,5,System software,C,Organization,231,231,4,1,1
@@ -38,7 +38,7 @@ railsware/upterm,railsware,2015-03-22,https://github.com/railsware/upterm,19001,
 angular-ui/ui-router,angular-ui,2013-01-18,https://github.com/angular-ui/ui-router,13914,3276,True,True,False,False,True,True,True,3,5,Web libraries and frameworks,TypeScript,Organization,193,201,8,10,1
 angular/angular-cli,angular,2015-06-04,https://github.com/angular/angular-cli,19673,4391,True,True,False,False,True,True,True,5,3,Software tools,TypeScript,Organization,422,426,16,4,1
 DefinitelyTyped/DefinitelyTyped,DefinitelyTyped,2012-10-05,https://github.com/DefinitelyTyped/DefinitelyTyped,17607,14501,False,True,False,True,True,True,True,3,6,Documentation,TypeScript,Organization,8431,8505,41,5,1
-NativeScript/NativeScript,NativeScript,2015-03-01,https://github.com/NativeScript/NativeScript,14868,1099,True,True,False,True,False,True,True,6,3,Non-web libraries and frameworks,TypeScript,Organization,138,148,38,2,1
+NativeScript/NativeScript,NativeScript,2015-03-01,https://github.com/NativeScript/NativeScript,14868,1099,True,True,False,True,False,True,True,6,3,Non-web libraries and frameworks,TypeScript,Organization,138,148,38,2,2
 angular/material2,angular,2016-01-04,https://github.com/angular/material2,15845,3958,True,True,False,False,True,True,True,6,2,Web libraries and frameworks,TypeScript,Organization,303,329,12,8,1
 graphcool/chromeless,graphcool,2017-06-01,https://github.com/graphcool/chromeless,13053,556,True,True,True,True,True,True,True,2,1,Web libraries and frameworks,TypeScript,Organization,15,51,6,20,1
 sahat/satellizer,sahat,2014-07-04,https://github.com/sahat/satellizer,8102,1258,False,True,False,False,False,False,True,2,4,Web libraries and frameworks,TypeScript,User,99,140,2,3,0
@@ -50,7 +50,7 @@ witheve/Eve,witheve,2013-09-10,https://github.com/witheve/Eve,6673,240,False,Tru
 google/google-api-nodejs-client,google,2013-03-06,https://github.com/google/google-api-nodejs-client,6772,1124,True,True,True,True,False,False,True,6,5,Non-web libraries and frameworks,TypeScript,Organization,95,108,10,4,1
 BabylonJS/Babylon.js,BabylonJS,2013-06-27,https://github.com/BabylonJS/Babylon.js,7496,1548,True,True,False,False,True,False,True,6,5,Web libraries and frameworks,TypeScript,Organization,288,296,10,0,1
 tensorflow/playground,tensorflow,2016-04-04,https://github.com/tensorflow/playground,7303,1447,True,True,False,False,False,True,True,4,2,Web libraries and frameworks,TypeScript,Organization,9,14,1,65,2
-Microsoft/reactxp,Microsoft,2017-03-22,https://github.com/Microsoft/reactxp,6987,471,True,True,False,False,False,True,True,2,1,Non-web libraries and frameworks,TypeScript,Organization,55,89,4,1,1
+Microsoft/reactxp,Microsoft,2017-03-22,https://github.com/Microsoft/reactxp,6987,471,True,True,False,False,False,True,True,2,1,Non-web libraries and frameworks,TypeScript,Organization,55,89,4,1,2
 mgechev/angular-seed,mgechev,2015-03-21,https://github.com/mgechev/angular-seed,4759,1631,True,True,False,False,True,True,True,4,3,Software tools,TypeScript,User,215,227,6,0,1
 winjs/winjs,winjs,2014-03-25,https://github.com/winjs/winjs,4035,497,True,True,False,False,False,True,True,4,4,Web libraries and frameworks,TypeScript,Organization,40,53,11,14,0
 jquery/esprima,jquery,2011-11-23,https://github.com/jquery/esprima,4733,532,True,True,False,False,True,True,True,3,7,Web libraries and frameworks,TypeScript,Organization,58,62,3,3,1
@@ -66,7 +66,7 @@ iluwatar/java-design-patterns,iluwatar,2014-08-09,https://github.com/iluwatar/ja
 square/okhttp,square,2012-07-23,https://github.com/square/okhttp,28916,6563,True,True,False,False,False,True,True,5,6,Web libraries and frameworks,Java,Organization,193,199,7,2,1
 google/guava,google,2014-05-29,https://github.com/google/guava,27110,6119,True,True,False,False,False,True,True,3,4,Non-web libraries and frameworks,Java,Organization,271,290,3,1,1
 JakeWharton/butterknife,JakeWharton,2013-03-05,https://github.com/JakeWharton/butterknife,22143,4242,False,True,False,False,False,False,True,5,5,Non-web libraries and frameworks,Java,User,80,88,3,3,1
-PhilJay/MPAndroidChart,PhilJay,2014-04-25,https://github.com/PhilJay/MPAndroidChart,24222,6406,True,True,False,True,True,True,True,1,4,Non-web libraries and frameworks,Java,User,73,82,3,12,1
+PhilJay/MPAndroidChart,PhilJay,2014-04-25,https://github.com/PhilJay/MPAndroidChart,24222,6406,True,True,False,True,True,True,True,1,4,Non-web libraries and frameworks,Java,User,73,82,3,12,2
 bumptech/glide,bumptech,2013-07-08,https://github.com/bumptech/glide,23370,4432,True,True,False,True,True,True,True,2,5,Web libraries and frameworks,Java,Organization,129,131,1,4,1
 JetBrains/kotlin,JetBrains,2012-02-13,https://github.com/JetBrains/kotlin,24342,2716,True,True,False,False,False,False,False,11,6,System software,Java,Organization,312,331,38,6,1
 square/leakcanary,square,2015-04-29,https://github.com/square/leakcanary,20696,3168,True,True,False,False,True,True,True,2,3,Software tools,Java,Organization,44,64,5,15,1
@@ -118,7 +118,7 @@ plumatic/schema,plumatic,2013-07-22,https://github.com/plumatic/schema,1880,224,
 weavejester/hiccup,weavejester,2009-11-02,https://github.com/weavejester/hiccup,1794,136,False,True,False,False,False,True,True,1,9,Web libraries and frameworks,Clojure,User,30,30,2,39,2
 onyx-platform/onyx,onyx-platform,2013-12-02,https://github.com/onyx-platform/onyx,1789,183,False,True,False,False,False,True,True,2,5,Non-web libraries and frameworks,Clojure,Organization,57,57,3,2,1
 cognitect/transit-format,cognitect,2014-06-26,https://github.com/cognitect/transit-format,1578,33,False,True,False,False,False,True,False,2,4,Non-web libraries and frameworks,Clojure,Organization,4,10,0,0,0
-nathanmarz/specter,nathanmarz,2015-02-26,https://github.com/nathanmarz/specter,1745,72,False,True,False,False,False,True,True,3,3,Non-web libraries and frameworks,Clojure,User,17,20,1,13,1
+nathanmarz/specter,nathanmarz,2015-02-26,https://github.com/nathanmarz/specter,1745,72,False,True,False,False,False,True,True,3,3,Non-web libraries and frameworks,Clojure,User,17,20,1,13,2
 apache/spark,apache,2014-02-25,https://github.com/apache/spark,18910,16387,True,True,False,True,False,False,True,20,4,Software tools,Scala,Organization,1552,1782,1,9,1
 apache/incubator-predictionio,apache,2013-01-25,https://github.com/apache/incubator-predictionio,11442,1826,True,True,False,False,False,False,True,6,5,System software,Scala,Organization,152,152,10,4,1
 playframework/playframework,playframework,2011-09-07,https://github.com/playframework/playframework,10735,3575,True,True,False,True,True,False,True,7,7,Web libraries and frameworks,Scala,Organization,780,791,27,7,1
@@ -137,7 +137,7 @@ mesosphere/marathon,mesosphere,2013-06-25,https://github.com/mesosphere/marathon
 rtyley/bfg-repo-cleaner,rtyley,2012-12-21,https://github.com/rtyley/bfg-repo-cleaner,4412,222,True,True,False,True,False,True,True,2,6,Software tools,Scala,User,7,7,1,22,1
 ornicar/lila,ornicar,2012-02-21,https://github.com/ornicar/lila,4378,698,True,True,False,False,True,True,True,11,6,Application software,Scala,User,119,121,6,1,1
 fpinscala/fpinscala,fpinscala,2012-02-23,https://github.com/fpinscala/fpinscala,3965,2193,False,True,False,False,False,True,True,3,6,Documentation,Scala,Organization,56,56,2,17,0
-scalaz/scalaz,scalaz,2010-01-16,https://github.com/scalaz/scalaz,3879,644,True,True,False,False,False,True,True,4,8,Non-web libraries and frameworks,Scala,Organization,220,226,30,11,1
+scalaz/scalaz,scalaz,2010-01-16,https://github.com/scalaz/scalaz,3879,644,True,True,False,False,False,True,True,4,8,Non-web libraries and frameworks,Scala,Organization,220,226,30,11,2
 sbt/sbt,sbt,2009-08-17,https://github.com/sbt/sbt,3656,684,True,True,False,True,True,True,True,5,9,Software tools,Scala,Organization,234,235,10,4,2
 gatling/gatling,gatling,2011-05-31,https://github.com/gatling/gatling,3819,809,True,True,False,False,True,False,True,8,7,Non-web libraries and frameworks,Scala,Organization,152,154,6,0,1
 twitter-archive/flockdb,twitter-archive,2010-04-12,https://github.com/twitter-archive/flockdb,3158,256,False,True,False,False,False,False,True,4,8,System software,Scala,Organization,21,24,8,7,0
@@ -182,7 +182,7 @@ drduh/macOS-Security-and-Privacy-Guide,drduh,2015-08-31,https://github.com/drduh
 freeCodeCamp/freeCodeCamp,freeCodeCamp,2014-12-24,https://github.com/freeCodeCamp/freeCodeCamp,39990,14440,True,True,False,True,False,False,True,3,4,System software,JavaScript,Organization,870,966,37,3,1
 twbs/bootstrap,twbs,2011-07-29,https://github.com/twbs/bootstrap,39990,60467,True,True,True,False,False,False,True,6,7,Web libraries and frameworks,JavaScript,Organization,1118,1189,15,9,1
 facebook/react,facebook,2013-05-24,https://github.com/facebook/react,39990,19730,True,True,False,True,True,True,True,10,5,Web libraries and frameworks,JavaScript,Organization,1345,1377,46,6,1
-d3/d3,d3,2010-09-27,https://github.com/d3/d3,39990,19605,False,True,False,False,True,True,True,1,8,Web libraries and frameworks,JavaScript,Organization,133,133,4,7,1
+d3/d3,d3,2010-09-27,https://github.com/d3/d3,39990,19605,False,True,False,False,True,True,True,1,8,Web libraries and frameworks,JavaScript,Organization,133,133,4,7,2
 vuejs/vue,vuejs,2013-07-29,https://github.com/vuejs/vue,39990,16104,True,True,True,True,True,False,True,6,5,Web libraries and frameworks,JavaScript,Organization,208,208,7,4,1
 airbnb/javascript,airbnb,2012-11-01,https://github.com/airbnb/javascript,39990,13167,False,True,False,False,False,True,True,1,6,Documentation,JavaScript,Organization,435,454,15,7,1
 angular/angular.js,angular,2010-01-06,https://github.com/angular/angular.js,39990,28673,True,True,False,True,True,True,True,5,8,Web libraries and frameworks,JavaScript,Organization,1805,1808,26,15,1
@@ -294,7 +294,7 @@ dzenbot/DZNEmptyDataSet,dzenbot,2014-06-03,https://github.com/dzenbot/DZNEmptyDa
 robbiehanson/CocoaAsyncSocket,robbiehanson,2011-11-22,https://github.com/robbiehanson/CocoaAsyncSocket,10469,2571,False,True,False,False,False,True,True,5,7,Non-web libraries and frameworks,Objective-C,User,47,55,3,107,1
 kevinzhow/PNChart,kevinzhow,2013-11-06,https://github.com/kevinzhow/PNChart,9437,1794,False,True,False,False,False,True,True,2,5,Non-web libraries and frameworks,Objective-C,User,71,90,2,16,1
 onevcat/VVDocumenter-Xcode,onevcat,2013-07-16,https://github.com/onevcat/VVDocumenter-Xcode,8500,1632,False,True,False,False,False,True,True,1,5,Software tools,Objective-C,User,32,40,1,1,0
-Flipboard/FLEX,Flipboard,2014-05-29,https://github.com/Flipboard/FLEX,9704,1054,True,True,False,False,False,True,True,2,4,Software tools,Objective-C,Organization,52,55,4,25,1
+Flipboard/FLEX,Flipboard,2014-05-29,https://github.com/Flipboard/FLEX,9704,1054,True,True,False,False,False,True,True,2,4,Software tools,Objective-C,Organization,52,55,4,25,2
 matryer/bitbar,matryer,2013-11-13,https://github.com/matryer/bitbar,10005,389,False,True,False,False,False,False,True,4,5,Software tools,Objective-C,User,68,70,3,10,1
 eczarny/spectacle,eczarny,2010-07-11,https://github.com/eczarny/spectacle,10144,544,True,True,False,False,False,False,True,2,8,Application software,Objective-C,User,28,28,1,26,0
 facebook/Shimmer,facebook,2014-02-18,https://github.com/facebook/Shimmer,8696,1050,True,True,False,False,False,False,True,2,4,Non-web libraries and frameworks,Objective-C,Organization,13,22,1,1,0
@@ -311,7 +311,7 @@ sdiehl/write-you-a-haskell,sdiehl,2015-01-05,https://github.com/sdiehl/write-you
 yesodweb/yesod,yesodweb,2009-06-27,https://github.com/yesodweb/yesod,1985,315,True,True,True,True,True,True,True,6,9,Web libraries and frameworks,Haskell,Organization,238,239,16,9,1
 ghcjs/ghcjs,ghcjs,2010-08-19,https://github.com/ghcjs/ghcjs,2020,144,False,True,False,False,False,True,True,9,8,Software tools,Haskell,Organization,39,41,3,18,0
 jameysharp/corrode,jameysharp,2016-05-05,https://github.com/jameysharp/corrode,1861,96,True,True,False,False,False,False,True,4,2,Software tools,Haskell,User,11,23,1,5,0
-ghc/ghc,ghc,2011-04-02,https://github.com/ghc/ghc,1953,521,False,True,False,False,False,False,True,28,7,Software tools,Haskell,Organization,450,674,2,2,1
+ghc/ghc,ghc,2011-04-02,https://github.com/ghc/ghc,1953,521,False,True,False,False,False,False,True,28,7,Software tools,Haskell,Organization,450,674,2,2,2
 jaspervdj/hakyll,jaspervdj,2009-12-02,https://github.com/jaspervdj/hakyll,1819,314,False,True,True,False,False,True,True,5,9,Software tools,Haskell,User,166,167,1,11,1
 gibiansky/IHaskell,gibiansky,2013-08-26,https://github.com/gibiansky/IHaskell,1780,183,False,True,False,False,False,True,True,8,5,System software,Haskell,User,69,77,3,3,1
 typelead/eta,typelead,2016-04-07,https://github.com/typelead/eta,2038,134,True,True,False,True,True,False,True,10,2,Software tools,Haskell,Organization,61,62,2,1,1
@@ -364,7 +364,7 @@ lk-geimfari/awesomo,lk-geimfari,2016-12-13,https://github.com/lk-geimfari/awesom
 ninenines/cowboy,ninenines,2011-03-09,https://github.com/ninenines/cowboy,5193,911,True,True,False,False,False,False,True,3,7,System software,Erlang,Organization,115,116,4,17,1
 apache/couchdb,apache,2009-05-21,https://github.com/apache/couchdb,3859,718,True,True,False,True,True,False,True,10,9,System software,Erlang,Organization,178,179,18,12,1
 processone/ejabberd,processone,2010-02-08,https://github.com/processone/ejabberd,3687,1116,True,True,True,True,False,True,True,12,8,Non-web libraries and frameworks,Erlang,Organization,128,139,8,8,1
-rabbitmq/rabbitmq-server,rabbitmq,2010-09-20,https://github.com/rabbitmq/rabbitmq-server,4659,1228,True,True,True,True,True,False,True,5,8,Non-web libraries and frameworks,Erlang,Organization,96,111,12,3,1
+rabbitmq/rabbitmq-server,rabbitmq,2010-09-20,https://github.com/rabbitmq/rabbitmq-server,4659,1228,True,True,True,True,True,False,True,5,8,Non-web libraries and frameworks,Erlang,Organization,96,111,12,3,2
 emqtt/emqttd,emqtt,2012-12-17,https://github.com/emqtt/emqttd,3637,717,False,True,False,False,True,True,True,2,6,Non-web libraries and frameworks,Erlang,Organization,54,54,10,1,2
 ChicagoBoss/ChicagoBoss,ChicagoBoss,2009-10-04,https://github.com/ChicagoBoss/ChicagoBoss,1733,297,False,True,False,False,False,True,True,7,9,Non-web libraries and frameworks,Erlang,Organization,80,80,6,5,1
 happi/theBeamBook,happi,2017-03-23,https://github.com/happi/theBeamBook,2081,178,False,True,False,False,False,True,True,8,1,Documentation,Erlang,User,13,36,3,2,1
@@ -430,7 +430,7 @@ guzzle/guzzle,guzzle,2011-02-28,https://github.com/guzzle/guzzle,14126,1812,True
 WordPress/WordPress,WordPress,2011-12-01,https://github.com/WordPress/WordPress,11479,6791,False,True,False,False,False,False,True,3,7,Application software,PHP,Organization,65,85,0,0,2
 PHPMailer/PHPMailer,PHPMailer,2011-08-23,https://github.com/PHPMailer/PHPMailer,11874,5530,False,True,False,True,True,True,True,2,7,Non-web libraries and frameworks,PHP,Organization,173,174,1,5,1
 PHPOffice/PHPExcel,PHPOffice,2012-06-18,https://github.com/PHPOffice/PHPExcel,10474,3541,False,True,False,False,False,True,True,2,6,Non-web libraries and frameworks,PHP,Organization,63,74,4,15,1
-phacility/phabricator,phacility,2011-01-21,https://github.com/phacility/phabricator,10174,1257,False,True,False,False,False,False,True,10,7,Documentation,PHP,Organization,272,293,4,0,1
+phacility/phabricator,phacility,2011-01-21,https://github.com/phacility/phabricator,10174,1257,False,True,False,False,False,False,True,10,7,Documentation,PHP,Organization,272,293,4,0,2
 roots/sage,roots,2011-01-29,https://github.com/roots/sage,9612,2589,True,True,True,False,True,True,True,4,7,Web libraries and frameworks,PHP,Organization,219,226,9,5,1
 phalcon/cphalcon,phalcon,2011-11-26,https://github.com/phalcon/cphalcon,9205,1690,True,True,False,True,True,True,True,11,7,Web libraries and frameworks,PHP,Organization,289,290,7,4,1
 slimphp/Slim,slimphp,2010-09-21,https://github.com/slimphp/Slim,9264,1775,True,True,False,False,False,True,True,1,8,Web libraries and frameworks,PHP,Organization,228,240,5,16,1

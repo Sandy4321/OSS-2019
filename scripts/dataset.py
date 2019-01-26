@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-'''
-    The dataset.py is responsible for requesting data
-    from the GitHub API, and for creating the dataset.
-'''
-
-# TO-DO: Get details of pull-requests
 
 __author__ =  'Felipe Fronchetti'
 __contact__ = 'fronchetti@usp.br'
@@ -111,19 +105,19 @@ def repositories_in_parallel(repository, dataset_folder, language):
     print('Collecting data from: ' + repository['name'])
     folder = dataset_folder + '/' + language + '/' + repository['name']
     project = Parser(repository, folder, collector)
-    # project.get_about()
-    # project.get_languages()
-    # project.get_pull_requests()
-    # project.get_commits()
-    # project.get_stars()
-    # project.get_forks()
+    project.get_about()
+    project.get_languages()
+    project.get_pull_requests()
+    project.get_commits()
+    project.get_stars()
+    project.get_forks()
     project.get_community_metrics()
 
 if __name__ == '__main__':
     api_client_id = str('4161a8257efaea420c94')
     api_client_secret = str('d814ec48927a6bd62c55c058cd028a949e5362d4')
     collector = GitHub.Collector(api_client_id, api_client_secret)
-    dataset_folder = '../../dataset'
+    dataset_folder = '../dataset'
     parallel = multiprocessing.Pool(processes=4)
 
     if os.path.isfile(dataset_folder + '/projects.json'):

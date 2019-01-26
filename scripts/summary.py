@@ -17,7 +17,7 @@ class Summary():
         self.folder = folder
         self.domains = {}
 
-        with open('../../spreadsheets/domains.csv', 'r') as domains_file:
+        with open('../spreadsheets/domains.csv', 'r') as domains_file:
             domains = csv.DictReader(domains_file)
 
             for domain in domains:
@@ -40,9 +40,9 @@ class Summary():
 
         return time_for_merge
 
-    def get_core_contributors(self):
+    def get_integrators(self):
         pull_requests_file = json.load(open(self.folder + '/pull_requests.json', 'r'))
-        core_contributors = []
+        integrators = []
 
         for line in pull_requests_file:
             if 'merged_by' in line:
@@ -50,14 +50,14 @@ class Summary():
 
                 if merged_by is not None:
                     if 'login' in line['merged_by']:
-                        core_member = line['merged_by']['login']
+                        integrator = line['merged_by']['login']
                     else:
-                        core_member = 'Anonymous'
+                        integrator = 'Anonymous'
                     
-                    if core_member not in core_contributors:
-                        core_contributors.append(core_member)
+                    if core_member not in integrators:
+                        integrators.append(integrator)
 
-        return core_contributors
+        return integrators
 
     def get_newcomers(self):
         commits_file = json.load(open(self.folder + '/commits.json', 'r'))
@@ -183,8 +183,8 @@ class Summary():
         return about_file['has_wiki']
 
 if __name__ == '__main__':
-    dataset_folder = '../../dataset'
-    csv_folder = '../../spreadsheets'
+    dataset_folder = '../dataset'
+    csv_folder = '../spreadsheets'
 
     if os.path.isfile(dataset_folder + '/projects.json'):
         with open(dataset_folder + '/projects.json', 'r') as projects_file:
@@ -210,7 +210,7 @@ if __name__ == '__main__':
                   'owner_type',
                   'newcomers',
                   'contributors',
-                  'core_contributors',
+                  'integrators',
                   'time_for_merge']
 
     with open(csv_folder + '/summary.csv', 'w') as summary_file:
@@ -241,7 +241,7 @@ if __name__ == '__main__':
             application_domain = project.get_domain()
             newcomers = project.get_newcomers()
             contributors = project.get_contributors()
-            core_contributors = project.get_core_contributors()
+            integrators = project.get_integrators()
             time_for_merge = project.get_time_for_merge()
 
             with open(csv_folder + '/summary.csv', 'a') as summary_file:
@@ -266,7 +266,7 @@ if __name__ == '__main__':
                         'owner_type': owner_type,
                         'newcomers': len(numpy.nan_to_num(newcomers)),
                         'contributors': len(numpy.nan_to_num(contributors)),
-                        'core_contributors': len(numpy.nan_to_num(core_contributors)),
+                        'integrators': len(numpy.nan_to_num(integrators)),
                         'time_for_merge': int(numpy.nan_to_num(numpy.average(time_for_merge)))}
 
                 writer.writerow(data)

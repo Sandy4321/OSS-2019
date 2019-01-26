@@ -1,5 +1,8 @@
+# Author: Felipe Fronchetti
+# E-mail: fronchetti@usp.br
+
 #########################################################
-#             Installing/Loading Packages               #
+#                 Loading Packages                      #
 #########################################################
 
 if (!require("gplots")) {
@@ -20,26 +23,20 @@ setwd("/mnt/SSD-DATA/oss-2019")
 #########################################################
 #                 Loading Dataset                       #
 #########################################################
-#########################################################
-#                 Loading Dataset                       #
-#########################################################
 
 projects <- read.csv("spreadsheets/summary.csv", header=TRUE,
                      colClasses=c("name" = "character",
                                   "owner" = "character",
                                   "created_at" = "character",
                                   "github_url" = "character",
-                                  "pulls_merged" = "numeric",
-                                  "commits" = "numeric",
                                   "stars" = "numeric",
                                   "forks" = "numeric",
                                   "has_contributing" = "logical",
                                   "has_readme" = "logical",
                                   "has_wiki" = "logical",
                                   "has_code_of_conduct" = "logical",
-                                  "has_pull_requests_template" = "logical",
-                                  "has_issues_template" = "logical",
-                                  "has_documentation_link" = "logical",
+                                  "has_pull_request_template" = "logical",
+                                  "has_issue_template" = "logical",
                                   "has_license" = "logical",
                                   "languages" = "numeric",
                                   "age" = "numeric",
@@ -48,7 +45,8 @@ projects <- read.csv("spreadsheets/summary.csv", header=TRUE,
                                   "owner_type" = "character",
                                   "newcomers" = "numeric",
                                   "contributors" = "numeric",
-                                  "core_contributors" = "numeric"))
+                                  "integrators" = "numeric",
+                                  "time_for_merge" = "numeric"))
 
 DistributionBoxplot <- function(n.rows, n.columns, columns, labels) {
     par(mfrow=c(n.rows, n.columns))
@@ -90,17 +88,9 @@ barplot(sort(table), cex.names=2, cex.axis= 2, horiz=TRUE, las=1, ylab="Years", 
 ##############################################
 #    FIGURE: Summary (Forks, Stars, Age) #
 ##############################################
-distribution <- subset(projects, select=c("forks","stars","open_issues"))
-labels <- list("# Forks", "# Stars", "# Open Issues")
+distribution <- subset(projects, select=c("forks","stars","age"))
+labels <- list("# Forks", "# Stars", "# Age")
 DistributionBoxplot(1, 3, distribution, labels)
-
-##########################################################
-#    FIGURE: Summary (Merged pull-requests, Commits) #
-##########################################################
-distribution <- subset(projects, select=c("pulls_merged","commits"))
-labels <- list("# Pull-requests", "# Commits")
-DistributionBoxplot(1, 2, distribution, labels)
-
 
 ##################################
 #    FIGURE: Correlation         #
@@ -115,25 +105,16 @@ column.x <- projects[["newcomers"]]
 column.y <- projects[["stars"]]
 CorrelationScatterplot(column.x, column.y, "# Newcomers", "# Stars")
 
-# Correlation: Total of Newcomers x Pull-requests
+# Correlation: Total of Newcomers x Integrators
 column.x <- projects[["newcomers"]]
-column.y <- projects[["age"]]
-CorrelationScatterplot(column.x, column.y, "# Newcomers", "# Pull-requests (Merged)")
+column.y <- projects[["integrators"]]
+CorrelationScatterplot(column.x, column.y, "# Newcomers", "# Integrators")
 
-# Correlation: Total of Newcomers x Forks
-column.x <- projects[["newcomers"]]
-column.y <- projects[["core_contributors"]]
-CorrelationScatterplot(column.x, column.y, "# Newcomers", "# Forks")
-
-# Correlation: Total of Newcomers x Commits
+# Correlation: Total of Newcomers x Languages
 column.x <- projects[["newcomers"]]
 column.y <- projects[["languages"]]
-CorrelationScatterplot(column.x, column.y, "# Newcomers", "# Commits")
+CorrelationScatterplot(column.x, column.y, "# Newcomers", "# Languages")
 
-# Correlation: Total of Newcomers x Number of used languages
-column.x <- projects[["newcomers"]]
-column.y <- projects[["time_for_merge"]]
-CorrelationScatterplot(column.x, column.y, "# Newcomers", "# Prog. Languages")
 
 #########################################################
 #       CLUSTERS: DIVIDED BY STRATIFICATION FACTORS     #
@@ -144,32 +125,23 @@ pdf("./Images/percentage_age.pdf", width=12, height=7)
 percentage <- projects %>%  group_by(age, cluster) %>% summarise(count=n()) %>% mutate(percent = count/sum(count))
 ggplot(percentage, aes(x = factor(age), y = percent * 100, fill = factor(cluster))) + geom_bar(stat="identity", width = 0.7, colour="black") + 
   labs(x = "Age", y = "Percent", fill = "Cluster") + coord_flip() + scale_fill_grey() + theme_classic()
-dev.off()
 
 # Domain 
-pdf("./Images/percentage_domain.pdf", width=12, height=7)
 percentage <- projects %>%  group_by(domain, cluster) %>% summarise(count=n()) %>% mutate(percent = count/sum(count))
 ggplot(percentage, aes(x = factor(domain), y = percent * 100, fill = factor(cluster))) + geom_bar(stat="identity", width = 0.7, colour="black") + 
   labs(x = "Domain", y = "Percent", fill = "Cluster") + coord_flip() + scale_fill_grey() + theme_classic()
-dev.off()
 
 # Main Language 
-pdf("./Images/percentage_main_language.pdf", width=12, height=7)
 percentage <- projects %>%  group_by(main_language, cluster) %>% summarise(count=n()) %>% mutate(percent = count/sum(count))
 ggplot(percentage, aes(x = factor(main_language), y = percent * 100, fill = factor(cluster))) + geom_bar(stat="identity", width = 0.7, colour="black") + 
   labs(x = "Language", y = "Percent", fill = "Cluster") + coord_flip() + scale_fill_grey() + theme_classic()
-dev.off()
 
 # Has README.md
-pdf("./Images/percentage_readme.pdf", width=12, height=7)
 percentage <- projects %>%  group_by(owner_type, cluster) %>% summarise(count=n()) %>% mutate(percent = count/sum(count))
 ggplot(percentage, aes(x = factor(owner_type), y = percent * 100, fill = factor(cluster))) + geom_bar(stat="identity", width = 0.7, colour="black") + 
   labs(x = "Owner", y = "Percent", fill = "Cluster") + coord_flip() + scale_fill_grey() + theme_classic()
-dev.off()
 
 # Has CONTRIBUTING.md
-pdf("./Images/percentage_contributing.pdf", width=12, height=7)
 percentage <- projects %>%  group_by(has_contributing, cluster) %>% summarise(count=n()) %>% mutate(percent = count/sum(count))
 ggplot(percentage, aes(x = factor(has_contributing), y = percent * 100, fill = factor(cluster))) + geom_bar(stat="identity", width = 0.7, colour="black") + 
   labs(x = "Owner", y = "Percent", fill = "Cluster") + coord_flip() + scale_fill_grey() + theme_classic()
-dev.off()
