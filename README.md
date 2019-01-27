@@ -5,7 +5,7 @@ This repository contains the materials used in the paper <a href="https://github
 <img src="https://github.com/fronchetti/OSS-2019/blob/master/oss-workflow.png" alt="Paper Workflow">
 
 The analysis presented in Figure 2 was made using Microsoft Excel, and it is available in <b><a href="https://github.com/fronchetti/OSS-2019/blob/master/tables/curves_corr.xlsx">tables/curves_corr.xlsx</a></b>.
-The data presented in the Table 1 to 4 are available in <b><a href="https://github.com/fronchetti/OSS-2019/blob/master/scripts/clustering-report.txt">scripts/clustering-report.txt</a></b> and <b><a href="https://github.com/fronchetti/OSS-2019/blob/master/scripts/classification-report.txt">scripts/classification-report.txt</a></b>.
+The data presented in Table 1 to 4 are available in <b><a href="https://github.com/fronchetti/OSS-2019/blob/master/scripts/clustering-report.txt">scripts/clustering-report.txt</a></b> and <b><a href="https://github.com/fronchetti/OSS-2019/blob/master/scripts/classification-report.txt">scripts/classification-report.txt</a></b>.
 
 ### Main Dependencies:
 * Python Programming Language (https://www.python.org/)
