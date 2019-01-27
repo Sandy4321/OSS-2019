@@ -4,6 +4,8 @@ This repository contains the materials used in the paper <a href="https://github
 ### Step by step
 <img src="https://github.com/fronchetti/OSS-2019/blob/master/oss-workflow.png" alt="Paper Workflow">
 
+The analysis presented in Figure 2 was made using Microsoft Excel, and it is available in <b><a href="https://github.com/fronchetti/OSS-2019/blob/master/tables/curves_corr.xlsx">tables/curves_corr.xlsx</a></b>.
+
 ### Main Dependencies:
 * Python Programming Language (https://www.python.org/)
 * PyKSC (https://github.com/flaviovdf/pyksc)
