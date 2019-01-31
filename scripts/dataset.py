@@ -86,8 +86,8 @@ class Parser():
             else:
                 print(self.repository['name'] + ' already contains a pull-requests file. Skipping.')
         except:
-            print("Problema nos pull_requests!")
-                
+            raise
+
 def popular_projects_per_language(languages, dataset_folder, collector):
     search = GitHubSearch.Search(collector)
     repositories = {}
