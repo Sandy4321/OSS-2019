@@ -5,9 +5,9 @@ __contact__ = 'fronchetti@usp.br'
 
 import multiprocessing
 from functools import partial
-import Telescope.collector as GitHub
-import Telescope.search as GitHubSearch
-import Telescope.repository as GitHubRepository
+import telescope.collector as GitHub
+import telescope.search as GitHubSearch
+import telescope.repository as GitHubRepository
 import json
 import os
 
@@ -94,7 +94,7 @@ def popular_projects_per_language(languages, dataset_folder, collector):
 
     for language in languages:
         print('Looking for repositories written in: ' + language + '. (Sorted by number of stars)')
-        repositories[language] = search.repositories(keywords='language:' + language.lower(), sort='stars')
+        repositories[language] = search.repositories(keywords='language:' + language.lower(), sort='stars', page_range=[1,10])
 
     with open(dataset_folder + '/projects.json', 'w') as projects_file:
         json.dump(repositories, projects_file)
@@ -124,7 +124,7 @@ if __name__ == '__main__':
         with open(dataset_folder + '/projects.json', 'r') as projects_file:
             projects = json.load(projects_file)
     else:
-        print('File with most popular projects per language does not exist. Generating one.')  
+        print('File with most popular projects per language does not exist. Generating one.')
 
         languages = ['C', 'CoffeeScript', 'Clojure', 'Erlang',
             'Go', 'Haskell', 'Java', 'JavaScript', 'Objective-C',
