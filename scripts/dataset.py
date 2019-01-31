@@ -94,7 +94,7 @@ def popular_projects_per_language(languages, dataset_folder, collector):
 
     for language in languages:
         print('Looking for repositories written in: ' + language + '. (Sorted by number of stars)')
-        repositories[language] = search.repositories(keywords='language:' + language.lower(), sort='stars', page_range=[1,10])
+        repositories[language] = search.repositories(keywords='language:' + language.lower(), sort='stars', page_range={'first_page':1,'last_page':10})
 
     with open(dataset_folder + '/projects.json', 'w') as projects_file:
         json.dump(repositories, projects_file)

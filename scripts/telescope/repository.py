@@ -33,7 +33,7 @@ class Repository:
     def issue(self, number):
         print('[Repository] Returning issue #' + str(number) + ' in ' + self.name)
         return self.github.request('repos/' + self.organization + '/' + self.name + '/issues/' + str(number))
-    
+
     def community_metrics(self):
         print('[Repository] Returning community metrics of project ' + self.name)
         return self.github.request('repos/' + self.organization + '/' + self.name + '/community/profile')
@@ -81,7 +81,7 @@ class Repository:
                 page_number = page_number + 1
 
         return commits
-    
+
     def pull_requests(self, state=None, direction=None, sort=None, base=None, head=None, page_range={}):
         print('[Repository] Returning pull-requests available in ' + self.name)
         pull_requests = []
@@ -132,7 +132,7 @@ class Repository:
 
     def pull_request_reviews(self, number, page_range={}):
         reviews = []
-        
+
         if page_range:
             first_page = page_range['first_page']
             last_page = page_range['last_page']
@@ -162,7 +162,7 @@ class Repository:
 
     def pull_request_comments(self, number, page_range={}):
         comments = []
-        
+
         if page_range:
             first_page = page_range['first_page']
             last_page = page_range['last_page']
