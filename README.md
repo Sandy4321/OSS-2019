@@ -4,6 +4,8 @@ This repository contains the materials used in the paper <a href="https://github
 ### Step by step
 <img src="https://github.com/fronchetti/OSS-2019/blob/master/oss-workflow.png" alt="Paper Workflow">
 
+If you want a ready copy of the dataset, access <a href="https://drive.google.com/file/d/1drGUaXcP33qOmqE8L8oTSPOFhC254o4R/view?usp=sharing">this link</a>.
+
 The analysis presented in Figure 2 was made using Microsoft Excel, and it is available in <a href="https://github.com/fronchetti/OSS-2019/blob/master/tables/curves_corr.xlsx">tables/curves_corr.xlsx</a>.
 The data presented in Table 1 to 4 are available in <a href="https://github.com/fronchetti/OSS-2019/blob/master/scripts/clustering-report.txt">scripts/clustering-report.txt</a> and <a href="https://github.com/fronchetti/OSS-2019/blob/master/scripts/classification-report.txt">scripts/classification-report.txt</a>.
 
