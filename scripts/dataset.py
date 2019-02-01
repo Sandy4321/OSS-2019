@@ -133,5 +133,8 @@ if __name__ == '__main__':
         projects = popular_projects_per_language(languages, dataset_folder, collector)
 
     for language in projects.keys():
-        repositories = projects[language]['items']
-        parallel.map(partial(repositories_in_parallel, dataset_folder=dataset_folder, language=language), repositories)
+	for index, page in enumerate(projects[language]):
+		print('Downloading page ' + str(index) + ' of most popular projects written in ' + str(language))
+		raw_input()
+		repositories = projects[language][index]['items']
+	        parallel.map(partial(repositories_in_parallel, dataset_folder=dataset_folder, language=language), repositories)
