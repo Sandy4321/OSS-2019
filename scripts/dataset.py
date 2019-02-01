@@ -135,6 +135,5 @@ if __name__ == '__main__':
     for language in projects.keys():
 	for index, page in enumerate(projects[language]):
 		print('Downloading page ' + str(index) + ' of most popular projects written in ' + str(language))
-		raw_input()
 		repositories = projects[language][index]['items']
 	        parallel.map(partial(repositories_in_parallel, dataset_folder=dataset_folder, language=language), repositories)
