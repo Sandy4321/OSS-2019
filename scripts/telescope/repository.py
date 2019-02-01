@@ -11,9 +11,6 @@ class Repository:
         self.organization = organization
         self.github = collector
 
-    def custom_request(self, url):
-        return self.github.request(url)
-
     def about(self):
         print('[Repository] Returning general information about' + self.name)
         return self.github.request('repos/' + self.organization + '/' + self.name)
@@ -33,34 +30,59 @@ class Repository:
     def issue(self, number):
         print('[Repository] Returning issue #' + str(number) + ' in ' + self.name)
         return self.github.request('repos/' + self.organization + '/' + self.name + '/issues/' + str(number))
-
+    
     def community_metrics(self):
         print('[Repository] Returning community metrics of project ' + self.name)
-        return self.github.request('repos/' + self.organization + '/' + self.name + '/community/profile')
+        return self.github.request('repos/' + self.organization + '/' + self.name + '/community/profile', headers={'Accept': 'application/vnd.github.black-panther-preview+json'})
+
+    def readme(self):
+        print('[Repository] Returning README.md file of project ' + self.name)
+        metrics = self.community_metrics()
+        readme = []
+
+        if metrics['files']['readme']:
+            if 'url' in metrics['files']['readme']:
+                description_url = metrics['files']['readme']['url']
+                description = self.github.custom_request(description_url, file_type='json')
+                readme = self.github.custom_request(description['download_url'])
+        return readme
+
+    def contributing(self):
+        print('[Repository] Returning CONTRIBUTING.md file of project ' + self.name)
+        metrics = self.community_metrics()
+        contributing = []
+
+        if metrics['files']['contributing']:
+            if 'url' in metrics['files']['contributing']:
+                description_url = metrics['files']['readme']['url']
+                description = self.github.custom_request(description_url, file_type='json')
+                contributing = self.github.custom_request(description['download_url'])
+        return contributing
 
     def commits(self, sha=None, path=None, author=None, since=None, until=None, page_range={}):
         print('[Repository] Returning commits available in ' + self.name)
 
         commits = []
-        parameters = []
+        parameters = {}
 
         if sha is not None:
-            parameters.append('sha=' + sha)
+            parameters['sha'] = sha
         if path is not None:
-            parameters.append('path=' + path)
+            parameters['path'] = path
         if author is not None:
-            parameters.append('author=' + author)
+            parameters['author'] = author
         if since is not None:
-            parameters.append('since=' + since)
+            paramethers['since'] = since
         if until is not None:
-            parameters.append('until=' + until)
+            paramethers['until'] = until
 
         if page_range:
             first_page = page_range['first_page']
             last_page = page_range['last_page']
 
             for page_number in range(first_page, last_page):
-                request = self.github.request('repos/' + self.organization + '/' + self.name + '/commits', parameters + ['page=' + str(page_number)])
+                parameters['page'] = str(page_number)
+                request = self.github.request('repos/' + self.organization + '/' + self.name + '/commits', parameters)
 
                 if request:
                     for commit in request:
@@ -70,7 +92,8 @@ class Repository:
             page_number = 1
 
             while(pages_exist):
-                request = self.github.request('repos/' + self.organization + '/' + self.name + '/commits', parameters + ['page=' + str(page_number)])
+                parameters['page'] = page_number
+                request = self.github.request('repos/' + self.organization + '/' + self.name + '/commits', parameters)
 
                 if request:
                     for commit in request:
@@ -81,29 +104,30 @@ class Repository:
                 page_number = page_number + 1
 
         return commits
-
+    
     def pull_requests(self, state=None, direction=None, sort=None, base=None, head=None, page_range={}):
         print('[Repository] Returning pull-requests available in ' + self.name)
         pull_requests = []
-        parameters = []
+        parameters = {}
 
         if state is not None:
-            parameters.append('state=' + state)
+            parameters['state'] = state
         if direction is not None:
-            parameters.append('direction=' + direction)
+            parameters['direction'] = direction
         if sort is not None:
-            parameters.append('sort=' + sort)
+            parameters['sort'] = sort
         if base is not None:
-            parameters.append('base=' + base)
+            parameters['base'] = base
         if head is not None:
-            parameters.append('head=' + head)
+            parameters['head'] = head
 
         if page_range:
             first_page = page_range['first_page']
             last_page = page_range['last_page']
 
             for page_number in range(first_page, last_page):
-                request = self.github.request('repos/' + self.organization + '/' + self.name + '/pulls', parameters + ['page=' + str(page_number)])
+                parameters['page'] = page_number
+                request = self.github.request('repos/' + self.organization + '/' + self.name + '/pulls', parameters)
 
                 if request:
                     for pull_request in request:
@@ -113,16 +137,16 @@ class Repository:
             page_number = 1
 
             while(pages_exist):
-                request = self.github.request('repos/' + self.organization + '/' + self.name + '/pulls', parameters + ['page=' + str(page_number)])
+                parameters['page'] = page_number
+                request = self.github.request('repos/' + self.organization + '/' + self.name + '/pulls', parameters)
 
                 if request:
                     for pull_request in request:
                         if pull_request:
                             if 'number' in pull_request:
-				number = pull_request['number']
-                                pull_request = self.pull_request(number)
-                                pull_request['reviews'] = self.pull_request_reviews(number)
-                                pull_request['comments'] = self.pull_request_comments(number)
+                                pull_request = self.pull_request(pull_request['number'])
+                                pull_request['reviews'] = self.pull_request_reviews(pull_request['number'])
+                                pull_request['comments'] = self.pull_request_comments(pull_request['number'])
                                 pull_requests.append(pull_request)
                 else:
                     pages_exist = False
@@ -133,13 +157,12 @@ class Repository:
 
     def pull_request_reviews(self, number, page_range={}):
         reviews = []
-
         if page_range:
             first_page = page_range['first_page']
             last_page = page_range['last_page']
 
             for page_number in range(first_page, last_page):
-                request = self.github.request('repos/' + self.organization + '/' + self.name + '/pulls' + '/' + str(number) + '/comments', ['page=' + str(page_number)])
+                request = self.github.request('repos/' + self.organization + '/' + self.name + '/pulls' + '/' + str(number) + '/comments', {'page': str(page_number)})
 
                 if request:
                     for review in request:
@@ -149,7 +172,7 @@ class Repository:
             page_number = 1
 
             while(pages_exist):
-                request = self.github.request('repos/' + self.organization + '/' + self.name + '/pulls' + '/' + str(number) + '/comments', ['page=' + str(page_number)])
+                request = self.github.request('repos/' + self.organization + '/' + self.name + '/pulls' + '/' + str(number) + '/comments', {'page': str(page_number)})
 
                 if request:
                     for review in request:
@@ -163,13 +186,13 @@ class Repository:
 
     def pull_request_comments(self, number, page_range={}):
         comments = []
-
+        
         if page_range:
             first_page = page_range['first_page']
             last_page = page_range['last_page']
 
             for page_number in range(first_page, last_page):
-                request = self.github.request('repos/' + self.organization + '/' + self.name + '/issues' + '/' + str(number) + '/comments', ['page=' + str(page_number)])
+                request = self.github.request('repos/' + self.organization + '/' + self.name + '/issues' + '/' + str(number) + '/comments', {'page': str(page_number)})
 
                 if request:
                     for comment in request:
@@ -179,7 +202,7 @@ class Repository:
             page_number = 1
 
             while(pages_exist):
-                request = self.github.request('repos/' + self.organization + '/' + self.name + '/issues' + '/' + str(number) + '/comments', ['page=' + str(page_number)])
+                request = self.github.request('repos/' + self.organization + '/' + self.name + '/issues' + '/' + str(number) + '/comments', {'page': str(page_number)})
 
                 if request:
                     for comment in request:
@@ -196,31 +219,32 @@ class Repository:
         print('[Repository] Returning issues available in ' + self.name)
 
         issues = []
-        parameters = []
+        parameters = {}
 
         if state is not None:
-            parameters.append('state=' + state)
+            parameters['state'] = state
         if direction is not None:
-            parameters.append('direction=' + direction)
+            parameters['direction'] = direction
         if labels is not None:
-            parameters.append('labels=' + labels)
+            parameters['labels'] = labels
         if creator is not None:
-            parameters.append('creator=' + creator)
+            parameters['creator'] = creator
         if since is not None:
-            parameters.append('since=' + since)
+            parameters['since'] = since
         if milestone is not None:
-            parameters.append('milestone=' + milestone)
+            parameters['milestone'] = milestone
         if mentioned is not None:
-            parameters.append('mentioned=' + mentioned)
+            parameters['mentioned'] = mentioned
         if assignee is not None:
-            parameters.append('assignee=' + assignee)
+            parameters['assignee'] = assignee
 
         if page_range:
             first_page = page_range['first_page']
             last_page = page_range['last_page']
 
             for page_number in range(first_page, last_page):
-                request = self.github.request('repos/' + self.organization + '/' + self.name + '/issues', parameters + ['page=' + str(page_number)])
+                parameters['page'] = page_number
+                request = self.github.request('repos/' + self.organization + '/' + self.name + '/issues', parameters)
 
                 if request:
                     for issue in request:
@@ -230,7 +254,8 @@ class Repository:
             page_number = 1
 
             while(pages_exist):
-                request = self.github.request('repos/' + self.organization + '/' + self.name + '/issues', parameters + ['page=' + str(page_number)])
+                parameters['page'] = page_number
+                request = self.github.request('repos/' + self.organization + '/' + self.name + '/issues', parameters)
 
                 if request:
                     for issue in request:
@@ -246,13 +271,18 @@ class Repository:
         print('[Repository] Returning contributors of ' + self.name)
 
         contributors = []
+        parameters = {}
+
+        if anonymous:
+            parameters['anonymous'] = anonymous
 
         if page_range:
             first_page = page_range['first_page']
             last_page = page_range['last_page']
 
             for page_number in range(first_page, last_page):
-                request = self.github.request('repos/' + self.organization + '/' + self.name + '/contributors', ['page=' + str(page_number), 'anon=' + str(anonymous)])
+                parameters['page'] = page_number
+                request = self.github.request('repos/' + self.organization + '/' + self.name + '/contributors', parameters)
 
                 if request:
                     for contributor in request:
@@ -262,7 +292,8 @@ class Repository:
             page_number = 1
 
             while(pages_exist):
-                request = self.github.request('repos/' + self.organization + '/' + self.name + '/contributors', ['page=' + str(page_number), 'anon=' + str(anonymous)])
+                parameters['page'] = page_number
+                request = self.github.request('repos/' + self.organization + '/' + self.name + '/contributors', parameters)
 
                 if request:
                     for contributor in request:
@@ -279,14 +310,13 @@ class Repository:
         print('[Repository] Returning stars available in ' + self.name)
 
         stars = []
-        parameters = []
 
         if page_range:
             first_page = page_range['first_page']
             last_page = page_range['last_page']
 
             for page_number in range(first_page, last_page):
-                request = self.github.request('repos/' + self.organization + '/' + self.name + '/stargazers', parameters + ['page=' + str(page_number)])
+                request = self.github.request('repos/' + self.organization + '/' + self.name + '/stargazers', {'page': str(page_number)}, {'Accept': 'application/vnd.github.v3.star+json'})
 
                 if request:
                     for star in request:
@@ -296,7 +326,7 @@ class Repository:
             page_number = 1
 
             while(pages_exist):
-                request = self.github.request('repos/' + self.organization + '/' + self.name + '/stargazers', parameters + ['page=' + str(page_number)])
+                request = self.github.request('repos/' + self.organization + '/' + self.name + '/stargazers', {'page': str(page_number)}, {'Accept': 'application/vnd.github.v3.star+json'})
 
                 if request:
                     for star in request:
@@ -312,17 +342,18 @@ class Repository:
         print('[Repository] Returning forks available in ' + self.name)
 
         forks = []
-        parameters = []
+        parameters = {}
 
         if sort is not None:
-            parameters.append('sort=' + sort)
+            parameters['sort'] = sort
 
         if page_range:
             first_page = page_range['first_page']
             last_page = page_range['last_page']
 
             for page_number in range(first_page, last_page):
-                request = self.github.request('repos/' + self.organization + '/' + self.name + '/forks', parameters + ['page=' + str(page_number)])
+                parameters['page'] = page_number
+                request = self.github.request('repos/' + self.organization + '/' + self.name + '/forks', parameters)
 
                 if request:
                     for fork in request:
@@ -332,7 +363,8 @@ class Repository:
             page_number = 1
 
             while(pages_exist):
-                request = self.github.request('repos/' + self.organization + '/' + self.name + '/forks', parameters + ['page=' + str(page_number)])
+                parameters['page'] = page_number
+                request = self.github.request('repos/' + self.organization + '/' + self.name + '/forks', parameters)
 
                 if request:
                     for fork in request:
