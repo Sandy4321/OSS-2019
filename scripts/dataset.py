@@ -114,8 +114,8 @@ def repositories_in_parallel(repository, dataset_folder, language):
     project.get_community_metrics()
 
 if __name__ == '__main__':
-    api_client_id = str('4161a8257efaea420c94')
-    api_client_secret = str('d814ec48927a6bd62c55c058cd028a949e5362d4')
+    api_client_id = str('#') # Add your own client id 
+    api_client_secret = str('#') # Add your own client secret
     collector = GitHub.Collector(api_client_id, api_client_secret)
     dataset_folder = '../dataset'
     parallel = multiprocessing.Pool(processes=4)
