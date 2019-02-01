@@ -94,7 +94,7 @@ def popular_projects_per_language(languages, dataset_folder, collector):
 
     for language in languages:
         print('Looking for repositories written in: ' + language + '. (Sorted by number of stars)')
-        repositories[language] = search.repositories(keywords='language:' + language.lower(), sort='stars', page_range={'first_page':1,'last_page':10})
+        repositories[language] = search.repositories(keywords='language:' + language.lower(), sort='stars')
 
     with open(dataset_folder + '/projects.json', 'w') as projects_file:
         json.dump(repositories, projects_file)
@@ -135,6 +135,5 @@ if __name__ == '__main__':
     for language in projects.keys():
 	for index, page in enumerate(projects[language]):
 		print('Downloading page ' + str(index) + ' of most popular projects written in ' + str(language))
-		raw_input()
 		repositories = projects[language][index]['items']
 	        parallel.map(partial(repositories_in_parallel, dataset_folder=dataset_folder, language=language), repositories)
